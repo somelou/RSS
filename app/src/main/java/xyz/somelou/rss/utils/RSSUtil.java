@@ -160,11 +160,7 @@ public class RSSUtil {
             item.setPubDate(entry.getPublishedDate());
             item.setAuthor(entry.getAuthor());
             // description过长时截取
-            String description=entry.getDescription().getValue();
-            if(description.length()>100){
-                description.substring(0,100);
-            }
-            item.setDescription(description);
+            item.setDescription(ClearStringUtil.clearDescription(entry.getDescription().getValue()));
             item.setLink(entry.getLink());
 
             rssItemBeans.add(item);
