@@ -22,7 +22,7 @@ public class FavorRSSItemDALImpl extends BaseDALImpl implements FavorRSSItemDAL 
 
     public FavorRSSItemDALImpl(Context context) {
         super(context);
-        TABLE_NAME = context.getString(R.string.table_favor_ssr_item);
+        TABLE_NAME = context.getString(R.string.table_favor_rss_item);
         //databaseHelper=new DatabaseHelper(context);
     }
 
@@ -88,7 +88,7 @@ public class FavorRSSItemDALImpl extends BaseDALImpl implements FavorRSSItemDAL 
             String description = cursor.getString(cursor.getColumnIndex("description"));
             String favorTime =cursor.getString(cursor.getColumnIndex("favor_time"));
 
-            System.out.println("get name:" + name + ",id:" + id + "，description:" + description+", time:"+favorTime);
+            //System.out.println("get name:" + name + ",id:" + id + "，description:" + description+", time:"+favorTime);
             //byte[] stuPic = cursor.getBlob(cursor.getColumnIndex("pic"));
             favorRSSItems.add(new FavorRSSItem(id,url,name,description,favorTime));
         }
@@ -106,7 +106,7 @@ public class FavorRSSItemDALImpl extends BaseDALImpl implements FavorRSSItemDAL 
             String description = cursor.getString(cursor.getColumnIndex("description"));
             String favorTime =cursor.getString(cursor.getColumnIndex("favor_time"));
 
-            System.out.println("get name:" + name + ",id:" + id + "，description:" + description+", time:"+favorTime);
+            //System.out.println("get name:" + name + ",id:" + id + "，description:" + description+", time:"+favorTime);
 
             //byte[] stuPic = cursor.getBlob(cursor.getColumnIndex("pic"));
             rssUrl=new FavorRSSItem(id,url,name,description,favorTime);

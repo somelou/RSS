@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // 本来想从xml中直接获取table名，但会让onCreate()失效
     // 表1
-    private final static String CREATE_SSR_URL_TABLE = "create table if not exists SSR_URL ("
+    private final static String CREATE_SSR_URL_TABLE = "create table if not exists RSS_URL ("
             + "url_id integer primary key autoincrement,"
             + "name TEXT,"
             + "url TEXT,"
@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "status TEXT);";
 
     // 收藏item
-    private final static String CREATE_FAVOR_RSS_ITEM_TABLE = "create table if not exists FAVOR_SSR_ITEM ("
+    private final static String CREATE_FAVOR_RSS_ITEM_TABLE = "create table if not exists FAVOR_RSS_ITEM ("
             + "item_id integer primary key autoincrement,"
             + "url TEXT,"
             + "name TEXT,"

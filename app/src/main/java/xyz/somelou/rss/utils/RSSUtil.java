@@ -187,7 +187,7 @@ public class RSSUtil {
      */
     public String getTitleName() {
         titleName=feed.getTitle();
-        if(titleName==null){
+        if(titleName==null||titleName.isEmpty()){
             titleName="unknown";
         }
         return titleName;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="table_ssr_url">SSR_URL</string>
-    <string name="table_favor_ssr_item">FAVOR_SSR_ITEM</string>
+    <string name="table_rss_url">RSS_URL</string>
+    <string name="table_favor_rss_item">FAVOR_RSS_ITEM</string>
 
-    <array name="ssr_url_array">
+    <array name="rss_url_array">
         <item>https://www.zhihu.com/rss</item>
         <item>http://haijiaoshi.com/feed</item>
         <item>http://www.4sbooks.com/feed</item>

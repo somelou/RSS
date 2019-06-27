@@ -21,13 +21,13 @@ public class RSSUrlDALImpl extends BaseDALImpl implements RSSUrlDAL {
 
     public RSSUrlDALImpl(Context context) {
         super(context);
-        TABLE_NAME = context.getString(R.string.table_ssr_url);
+        TABLE_NAME = context.getString(R.string.table_rss_url);
         //databaseHelper=new DatabaseHelper(context);
     }
 
     /**
      * getAllData()
-     * 查询表ssr_url全部内容,需要有个容器存放，以供使用，定义了一个ArrayList类的list
+     * 查询表rss_url全部内容,需要有个容器存放，以供使用，定义了一个ArrayList类的list
      * 使用游标Cursor从表中查询数据,第一个参数："表名"，中间5个：null，查询出来内容的排序方式："stuid DESC"
      *
      * @param rssUrlArrayList ArrayList<RSSUrl>
