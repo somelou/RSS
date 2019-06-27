@@ -5,7 +5,9 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import xyz.somelou.rss.R;
 import xyz.somelou.rss.db.DatabaseHelper;
+import xyz.somelou.rss.utils.RSSUtil;
 
 /**
  * @author somelou
@@ -17,9 +19,12 @@ public class BaseDALImpl {
     DatabaseHelper databaseHelper;
     SQLiteDatabase db;
     String TABLE_NAME;
+    private Context context;
 
-    BaseDALImpl(Context context){
+    public BaseDALImpl(Context context){
         databaseHelper=new DatabaseHelper(context);
+        this.context=context;
+        // System.out.println("new in basedalimpl");
     }
 
     /**
@@ -29,5 +34,29 @@ public class BaseDALImpl {
      */
     Cursor getData(String sql) throws SQLException {
         return databaseHelper.getReadableDatabase().rawQuery(sql, null);
+    }
+
+    /**
+     * 预设置一些rss源
+     * url从xml中获取
+     */
+    public void preInsertRssUrl(){
+        String[] RSS_URL_ARRAY = context.getResources().getStringArray(R.array.ssr_url_array);
+        RSSUtil rssUtil = new RSSUtil(RSS_URL_ARRAY[0]);
+
+        // 插入一些rss源
+        // 问题1：必须要和表的column数量一致，不能插入不饱和数据
+        // 2：string的拼接
+        String INSERT_RSS_URL = "INSERT INTO SSR_URL SELECT 1 AS 'url_id','" + rssUtil.getTitleName() + "' AS 'name', '"
+                + RSS_URL_ARRAY[0] + "' AS 'url' ,'' AS 'GROUP_NAME','NO_SUBSCRIBE' AS 'status' ";
+        for (int i = 1; i < RSS_URL_ARRAY.length; i++) {
+            rssUtil.setRssUrl(RSS_URL_ARRAY[i]);
+            INSERT_RSS_URL += "UNION SELECT "+(i+1)+",'" + rssUtil.getTitleName() + "','" + RSS_URL_ARRAY[i] + "',''," +
+                    "'NO_SUBSCRIBE' ";
+        }
+
+        db=databaseHelper.getWritableDatabase();
+        db.execSQL(INSERT_RSS_URL);
+        //System.out.println(INSERT_RSS_URL);
     }
 }

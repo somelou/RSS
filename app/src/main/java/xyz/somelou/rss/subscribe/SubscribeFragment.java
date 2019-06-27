@@ -1,7 +1,6 @@
 package xyz.somelou.rss.subscribe;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import xyz.somelou.rss.R;
  * create an instance of this fragment.
  */
 public class SubscribeFragment extends Fragment {
-
 
     public SubscribeFragment() {
         // Required empty public constructor

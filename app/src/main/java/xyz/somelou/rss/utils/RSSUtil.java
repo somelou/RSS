@@ -33,7 +33,7 @@ public class RSSUtil {
     // 数量
     private int feedSize;
     // uri
-    private String uri;
+    private String url;
     // title
     private String titleName;
 
@@ -41,6 +41,8 @@ public class RSSUtil {
     private String description;
     // item
     private List<RSSItemBean> rssItemBeans;
+
+    private SyndFeed feed;
 
     public RSSUtil(){}
 
@@ -107,11 +109,10 @@ public class RSSUtil {
      */
     private void parseFromXml(String urlXml) throws Exception {
         SyndFeedInput input = new SyndFeedInput();
-        SyndFeed feed;
         ByteArrayInputStream inputStream = new ByteArrayInputStream(urlXml.getBytes(StandardCharsets.UTF_8));
         feed = input.build(new XmlReader(inputStream));
 
-        setData(feed);
+        //setData(feed);
     }
 
     /**
@@ -127,7 +128,6 @@ public class RSSUtil {
 
         // 防止403
         connection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-        SyndFeed feed;
         String contentEncoding = connection.getHeaderField("Content-Encoding");
         if (contentEncoding != null && contentEncoding.contains("gzip")) {
             System.out.println("content encoding is gzip");
@@ -136,22 +136,22 @@ public class RSSUtil {
         } else {
             feed = input.build(new XmlReader(connection.getInputStream()));
         }
-
-        setData(feed);
     }
 
-    private void setData(SyndFeed feed) {
+    private List<RSSItemBean> setRssItemBeans(SyndFeed feed) {
         // title name
         titleName=feed.getTitle();
+        if(titleName==null){
+            titleName="unknown";
+        }
         // uri
-        uri=feed.getUri();
+        url=feed.getLink();
         description=feed.getDescription();
         List entries = feed.getEntries();
         RSSItemBean item;
         rssItemBeans = new ArrayList<>();
         // size
-        feedSize = entries.size();
-        for (int i = 0; i < feedSize; i++) {
+        for (int i = 0; i < feed.getEntries().size(); i++) {
             SyndEntry entry = (SyndEntry) entries.get(i);
             item = new RSSItemBean();
             item.setTitle(entry.getTitle().trim());
@@ -164,14 +164,13 @@ public class RSSUtil {
             item.setLink(entry.getLink());
 
             rssItemBeans.add(item);
-            System.out.println(entry.getTitle());
         }
-        feedSize = feed.getEntries().size();
-        System.out.println("feed size:" + feedSize);
+        return this.rssItemBeans;
+        //System.out.println("titleName: " + titleName+", url: "+url);
     }
 
     public int getFeedSize() {
-        return feedSize;
+        return feed.getEntries().size();
     }
 
     public void setFeedSize(int feedSize) {
@@ -179,19 +178,22 @@ public class RSSUtil {
     }
 
     public List<RSSItemBean> getRssItemBeans() {
-        return rssItemBeans;
+        return setRssItemBeans(feed);
     }
 
-
     public String getTitleName() {
+        titleName=feed.getTitle();
+        if(titleName==null){
+            titleName="unknown";
+        }
         return titleName;
     }
 
-    public String getUri() {
-        return uri;
+    public String getUrl() {
+        return feed.getLink();
     }
 
     public String getDescription() {
-        return description;
+        return ClearStringUtil.clearDescription(feed.getDescription());
     }
 }

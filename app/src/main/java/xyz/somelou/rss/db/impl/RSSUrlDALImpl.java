@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import xyz.somelou.rss.R;
 import xyz.somelou.rss.bean.RSSUrl;
-import xyz.somelou.rss.db.SSRUrlDAL;
+import xyz.somelou.rss.db.RSSUrlDAL;
 import xyz.somelou.rss.enums.SubscribeStatus;
 import xyz.somelou.rss.utils.RSSUtil;
 
@@ -17,9 +17,9 @@ import xyz.somelou.rss.utils.RSSUtil;
  * @description
  * @date 2019-06-25
  */
-public class SSRUrlDALImpl extends BaseDALImpl implements SSRUrlDAL {
+public class RSSUrlDALImpl extends BaseDALImpl implements RSSUrlDAL {
 
-    public SSRUrlDALImpl(Context context) {
+    public RSSUrlDALImpl(Context context) {
         super(context);
         TABLE_NAME = context.getString(R.string.table_ssr_url);
         //databaseHelper=new DatabaseHelper(context);
@@ -57,41 +57,6 @@ public class SSRUrlDALImpl extends BaseDALImpl implements SSRUrlDAL {
         Cursor cursor = getData("select * from " + TABLE_NAME + " where name like '%" + query + "%' or " + "group_name like '%" + query +
                 "%' or url like '%" + query + "%'");
         return getDataFromCursor(rssUrlArrayList,cursor);
-    }
-
-    private ArrayList<RSSUrl> getDataFromCursor(ArrayList<RSSUrl> rssUrlArrayList,Cursor cursor){
-        //让游标从表头游到表尾,并把数据存放到list中
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex("url_id"));
-            String name = cursor.getString(cursor.getColumnIndex("name"));
-            String url = cursor.getString(cursor.getColumnIndex("url"));
-            String groupName = cursor.getString(cursor.getColumnIndex("group_name"));
-            String status =cursor.getString(cursor.getColumnIndex("status"));
-
-            System.out.println("get name:" + name + ",id:" + id + "，groupName:" + groupName+", status:"+status);
-            //byte[] stuPic = cursor.getBlob(cursor.getColumnIndex("pic"));
-            rssUrlArrayList.add(new RSSUrl(id, name, url, groupName,status));
-        }
-        cursor.close();
-        return rssUrlArrayList;
-    }
-
-    private RSSUrl getDataFromCursor(Cursor cursor){
-        //让游标从表头游到表尾,并把数据存放到list中r
-        RSSUrl rssUrl=null;
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex("url_id"));
-            String name = cursor.getString(cursor.getColumnIndex("name"));
-            String url = cursor.getString(cursor.getColumnIndex("url"));
-            String groupName = cursor.getString(cursor.getColumnIndex("group_name"));
-            String status =cursor.getString(cursor.getColumnIndex("status"));
-
-            System.out.println("get name:" + name + ",id:" + id + "，groupName:" + groupName+", status:"+status);
-            //byte[] stuPic = cursor.getBlob(cursor.getColumnIndex("pic"));
-            rssUrl=new RSSUrl(id, name, url, groupName,status);
-        }
-        cursor.close();
-        return rssUrl;
     }
 
     @Override
@@ -178,5 +143,40 @@ public class SSRUrlDALImpl extends BaseDALImpl implements SSRUrlDAL {
         int result=statement.executeUpdateDelete();
         db.close();
         return result;
+    }
+
+    private ArrayList<RSSUrl> getDataFromCursor(ArrayList<RSSUrl> rssUrlArrayList,Cursor cursor){
+        //让游标从表头游到表尾,并把数据存放到list中
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("url_id"));
+            String name = cursor.getString(cursor.getColumnIndex("name"));
+            String url = cursor.getString(cursor.getColumnIndex("url"));
+            String groupName = cursor.getString(cursor.getColumnIndex("group_name"));
+            String status =cursor.getString(cursor.getColumnIndex("status"));
+
+            //System.out.println("get name:" + name + ",id:" + id + "，groupName:" + groupName+", status:"+status);
+            //byte[] stuPic = cursor.getBlob(cursor.getColumnIndex("pic"));
+            rssUrlArrayList.add(new RSSUrl(id, name, url, groupName,status));
+        }
+        cursor.close();
+        return rssUrlArrayList;
+    }
+
+    private RSSUrl getDataFromCursor(Cursor cursor){
+        //让游标从表头游到表尾,并把数据存放到list中r
+        RSSUrl rssUrl=null;
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("url_id"));
+            String name = cursor.getString(cursor.getColumnIndex("name"));
+            String url = cursor.getString(cursor.getColumnIndex("url"));
+            String groupName = cursor.getString(cursor.getColumnIndex("group_name"));
+            String status =cursor.getString(cursor.getColumnIndex("status"));
+
+            //System.out.println("get name:" + name + ",id:" + id + "，groupName:" + groupName+", status:"+status);
+            //byte[] stuPic = cursor.getBlob(cursor.getColumnIndex("pic"));
+            rssUrl=new RSSUrl(id, name, url, groupName,status);
+        }
+        cursor.close();
+        return rssUrl;
     }
 }

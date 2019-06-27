@@ -10,7 +10,7 @@ import xyz.somelou.rss.enums.SubscribeStatus;
  * @description SSR_URL表协作类接口
  * @date 2019-06-25
  */
-public interface SSRUrlDAL {
+public interface RSSUrlDAL {
 
     /**
      * 查询表ssr_url全部内容

@@ -7,14 +7,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import java.util.List;
-
 import xyz.somelou.rss.adapter.ViewPagerAdapter;
-import xyz.somelou.rss.bean.RSSItemBean;
 import xyz.somelou.rss.find.FindFragment;
 import xyz.somelou.rss.my.MyFragment;
 import xyz.somelou.rss.subscribe.SubscribeFragment;
-import xyz.somelou.rss.utils.RSSUtil;
+import xyz.somelou.rss.thread.PreDatabaseThread;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,21 +19,19 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem menuItem;
     private BottomNavigationView bottomNavigationView;
 
+    // 预加载数据库
+    PreDatabaseThread preDatabaseThread;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        RSSUtil rssUtil=new RSSUtil("http://www.4sbooks.com/feed");
-        List<RSSItemBean> rssItemBeans = rssUtil.getRssItemBeans();
-        if (rssItemBeans != null && !rssItemBeans.isEmpty()){
-            for (RSSItemBean item : rssItemBeans) {
-                System.out.println(item.getTitle());
-                System.out.println(item.getLink());
-                System.out.println(item.getPubDate());
-                System.out.println(item.getDescription());
-            }
-        }
+        // 测试
+        preDatabaseThread=new PreDatabaseThread(getApplicationContext());
+        new Thread(preDatabaseThread).start();
+
+        setContentView(R.layout.activity_main);
 
         viewPager=findViewById(R.id.viewpager);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -89,19 +84,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         setupViewPager(viewPager);
-    }
-
-    private void testRssUtil(){
-        RSSUtil rssUtil=new RSSUtil("https://rsshub.app/zhihu/hotlist");
-        List<RSSItemBean> rssItemBeans = rssUtil.getRssItemBeans();
-        if (rssItemBeans != null && !rssItemBeans.isEmpty()){
-            for (RSSItemBean item : rssItemBeans) {
-                System.out.println(item.getTitle());
-                System.out.println(item.getLink());
-                System.out.println(item.getPubDate());
-                System.out.println(item.getDescription());
-            }
-        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
