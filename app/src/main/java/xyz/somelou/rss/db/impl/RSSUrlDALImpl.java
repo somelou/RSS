@@ -156,7 +156,7 @@ public class RSSUrlDALImpl extends BaseDALImpl implements RSSUrlDAL {
 
             //System.out.println("get name:" + name + ",id:" + id + "，groupName:" + groupName+", status:"+status);
             //byte[] stuPic = cursor.getBlob(cursor.getColumnIndex("pic"));
-            rssUrlArrayList.add(new RSSUrl(id, name, url, groupName,status));
+            rssUrlArrayList.add(new RSSUrl(id, url, name,groupName,status));
         }
         cursor.close();
         return rssUrlArrayList;
@@ -174,7 +174,7 @@ public class RSSUrlDALImpl extends BaseDALImpl implements RSSUrlDAL {
 
             //System.out.println("get name:" + name + ",id:" + id + "，groupName:" + groupName+", status:"+status);
             //byte[] stuPic = cursor.getBlob(cursor.getColumnIndex("pic"));
-            rssUrl=new RSSUrl(id, name, url, groupName,status);
+            rssUrl=new RSSUrl(id, url, name ,groupName,status);
         }
         cursor.close();
         return rssUrl;

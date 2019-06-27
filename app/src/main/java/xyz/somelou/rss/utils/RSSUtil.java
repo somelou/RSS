@@ -139,14 +139,6 @@ public class RSSUtil {
     }
 
     private List<RSSItemBean> setRssItemBeans(SyndFeed feed) {
-        // title name
-        titleName=feed.getTitle();
-        if(titleName==null){
-            titleName="unknown";
-        }
-        // uri
-        url=feed.getLink();
-        description=feed.getDescription();
         List entries = feed.getEntries();
         RSSItemBean item;
         rssItemBeans = new ArrayList<>();
@@ -169,6 +161,10 @@ public class RSSUtil {
         //System.out.println("titleName: " + titleName+", url: "+url);
     }
 
+    /**
+     * 获取数量
+     * @return size
+     */
     public int getFeedSize() {
         return feed.getEntries().size();
     }
@@ -177,10 +173,18 @@ public class RSSUtil {
         this.feedSize = feedSize;
     }
 
+    /**
+     * 获取item内容
+     * @return
+     */
     public List<RSSItemBean> getRssItemBeans() {
         return setRssItemBeans(feed);
     }
 
+    /**
+     * 获取标题，title为空时设为unknown
+     * @return
+     */
     public String getTitleName() {
         titleName=feed.getTitle();
         if(titleName==null){
@@ -189,10 +193,18 @@ public class RSSUtil {
         return titleName;
     }
 
+    /**
+     * 可能是链接，不建议使用
+     * @return
+     */
     public String getUrl() {
         return feed.getLink();
     }
 
+    /**
+     * 描述，过长时截取
+     * @return
+     */
     public String getDescription() {
         return ClearStringUtil.clearDescription(feed.getDescription());
     }
