@@ -17,6 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".my.myGroup.MyGroupRecyclerActivity"
+            android:label="LinearLayoutManager"/>
     </application>
 
 </manifest>

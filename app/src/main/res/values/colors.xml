@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-
+    <color name="light_blue">#98F5FF</color>
     <color name="bg_normal_gray">#E0E0E0</color>
 
     <color name="tab_checked">#3F51B5</color>

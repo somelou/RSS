@@ -1,5 +1,6 @@
 package xyz.somelou.rss.my;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import xyz.somelou.rss.R;
+import xyz.somelou.rss.my.myGroup.MyGroupRecyclerActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,6 +20,7 @@ import xyz.somelou.rss.R;
  * create an instance of this fragment.
  */
 public class MyFragment extends Fragment {
+    private Context mContext;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -56,13 +59,35 @@ public class MyFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+
+//        if(getActivity()!=null){
+//
+//            getActivity().findViewById(R.id.layout_pinned_header_linear).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    MyGroupRecyclerActivity.startUp(mContext);
+//                }
+//            });
+//        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my, container, false);
+        View view=inflater.inflate(R.layout.fragment_my, container, false);
+        mContext=getContext();
+        view.findViewById(R.id.layout_pinned_header_linear).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyGroupRecyclerActivity.startUp(mContext);
+            }
+        });
+        return view;
+
     }
 
     @Override
