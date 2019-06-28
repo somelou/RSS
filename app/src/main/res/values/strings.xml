@@ -3,4 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="RSSdescription">这是RSS图标</string>
+    <string name="find_menu_search">搜索</string>
+    <string name="find_menu_refresh">刷新</string>
+
 </resources>

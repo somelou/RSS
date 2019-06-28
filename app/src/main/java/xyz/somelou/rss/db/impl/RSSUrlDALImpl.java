@@ -52,6 +52,12 @@ public class RSSUrlDALImpl extends BaseDALImpl implements RSSUrlDAL {
     }
 
     @Override
+    public ArrayList<RSSUrl> getSubscribe(ArrayList<RSSUrl> rssUrls) {
+        Cursor cursor = getData("SELECT * FROM " + TABLE_NAME + " where status='SUBSCRIBE';");
+        return getDataFromCursor(rssUrls,cursor);
+    }
+
+    @Override
     public ArrayList<RSSUrl> getQueryData(ArrayList<RSSUrl> rssUrlArrayList, String query) {
         db = databaseHelper.getReadableDatabase();
         Cursor cursor = getData("select * from " + TABLE_NAME + " where name like '%" + query + "%' or " + "group_name like '%" + query +

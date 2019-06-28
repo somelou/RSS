@@ -20,6 +20,13 @@ public interface RSSUrlDAL {
     ArrayList<RSSUrl> getAllData(ArrayList<RSSUrl> rssUrlArrayList);
 
     /**
+     * 获取所有已经订阅的RSS源
+     * @param rssUrls 这里可能不需要这样，为保险起见
+     * @return
+     */
+    ArrayList<RSSUrl> getSubscribe(ArrayList<RSSUrl> rssUrls);
+
+    /**
      * 模糊查询
      * @param rssUrlArrayList 必须保证传进 Adapter 的数据 List 是同一个 List
      * @param query 输入的字符串
