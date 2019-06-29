@@ -11,5 +11,7 @@
     <ListView
         android:id="@+id/findlist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:divider="@drawable/divider_list"
+        android:dividerHeight="4dp" />
 </FrameLayout>
