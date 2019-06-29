@@ -61,7 +61,6 @@ public class RSSFindAdapter extends BaseAdapter implements Filterable,View.OnCli
     }
     //刷新时还原
     public ArrayList<RSSUrl> getOriginalData(){
-
         return bkfinds;
     }
 
