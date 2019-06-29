@@ -51,12 +51,18 @@ public class RSSFindAdapter extends BaseAdapter implements Filterable,View.OnCli
     public RSSFindAdapter(Context c,ArrayList<RSSUrl> list,SubClickListener cl){
         context=c;
         finds=list;
-        bkfinds=list;
+        bkfinds=new ArrayList<>();
+        bkfinds.addAll(list);
         clickListener=cl;
     }
 
     public int getCount() {
         return finds.size();
+    }
+    //刷新时还原
+    public ArrayList<RSSUrl> getOriginalData(){
+
+        return bkfinds;
     }
 
     @Override
@@ -66,7 +72,7 @@ public class RSSFindAdapter extends BaseAdapter implements Filterable,View.OnCli
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
 
@@ -131,11 +137,16 @@ public class RSSFindAdapter extends BaseAdapter implements Filterable,View.OnCli
             //用于定义过滤规则
             FilterResults result = new FilterResults();
             ArrayList<RSSUrl> templist;
+            templist=finds;
             if (TextUtils.isEmpty(constraint)) {//当过滤的关键字为空的时候，我们则显示所有的数据
-                templist=bkfinds;
+
+
             } else {//否则把符合条件的数据对象添加到集合中
                 RSSUrlDALImpl sql=new RSSUrlDALImpl(context);
-                templist = sql.getQueryData(new ArrayList<RSSUrl>(),constraint.toString());
+                //不能给templist赋值，否则会影响指向同一内存的finds的数据
+                templist.clear();
+                templist.addAll(sql.getQueryData(new ArrayList<RSSUrl>(),constraint.toString()));
+                //templist = ;
               /*  for (RSSUrl tempRSS : finds) {
                     //匹配RSS源的标题，组名
                     if (tempRSS.getName().contains(constraint) || tempRSS.getGroupName().
@@ -147,15 +158,18 @@ public class RSSFindAdapter extends BaseAdapter implements Filterable,View.OnCli
             }
             result.values = templist; //将得到的集合保存到FilterResults的value变量中
             result.count = templist.size();//将集合的大小保存到FilterResults的count变量中
-            if (result.count>0)
-            System.out.println("过滤后:"+templist.get(0).getUrl()+", "+templist.get(0).getName());
+            /*if (result.count>0)
+            System.out.println("过滤后:"+templist.get(0).getUrl()+", "+templist.get(0).getName());*/
             return result;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
+
             finds = (ArrayList<RSSUrl>) results.values;
-            System.out.println("num:"+getCount());
+            for (int i=0;i<finds.size();i++) {
+                System.out.println("过滤后,当前是第"+i +"个,链接为"+ finds.get(i).getUrl() + ", 标题是" + finds.get(i).getName());
+            }
             //通知数据改变
             notifyDataSetChanged();
             //检索不到数据则提示空

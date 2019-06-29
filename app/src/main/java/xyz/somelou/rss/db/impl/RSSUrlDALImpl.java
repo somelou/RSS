@@ -75,14 +75,14 @@ public class RSSUrlDALImpl extends BaseDALImpl implements RSSUrlDAL {
     @Override
     public long insertOneData(String url, String groupName, SubscribeStatus status) {
         db=databaseHelper.getWritableDatabase();
-        String sql="INSERT INTO STU VALUES (null,?,?,?,?)";
+        String sql="INSERT INTO "+TABLE_NAME+" VALUES (null,?,?,?,?)";
 
         SQLiteStatement statement=db.compileStatement(sql);
         statement.clearBindings();
-        statement.bindString(2,new RSSUtil(url).getTitleName());
-        statement.bindString(3,url);
-        statement.bindString(4,groupName);
-        statement.bindString(5,status.toString());
+        statement.bindString(1,new RSSUtil(url).getTitleName());
+        statement.bindString(2,url);
+        statement.bindString(3,groupName);
+        statement.bindString(4,status.toString());
 
         long result=statement.executeInsert();
         db.close();

@@ -133,7 +133,10 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
                 Toast.makeText(getActivity(),"--",Toast.LENGTH_SHORT).show();
                 //清除ListView的过滤
                 lv.clearTextFilter();
-                RSSadapter.getFilter().filter("");
+                //RSSadapter.getFilter().filter("");
+                RSSfinds.clear();
+                RSSfinds.addAll(RSSadapter.getOriginalData());
+                RSSadapter.notifyDataSetChanged();
                 break;
             case R.id.find_menu_search:
                 input();
@@ -173,12 +176,12 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
         //点击后订阅图标要变，是通过RSSUrl的订阅属性变带动适配器的数据源变
         if (RSSfinds.get((int)v.getTag()).getStatus()==SubscribeStatus.NO_SUBSCRIBE){
             RSSfinds.get((int)v.getTag()).setStatus(SubscribeStatus.SUBSCRIBED);
-            Toast.makeText(getContext(),"已订阅！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),RSSfinds.get((int)v.getTag()).getName()+"  已订阅！", Toast.LENGTH_SHORT).show();
         }
 
         else {
             RSSfinds.get((int) v.getTag()).setStatus(SubscribeStatus.NO_SUBSCRIBE);
-            Toast.makeText(getContext(), "取消订阅！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), RSSfinds.get((int)v.getTag()).getName()+"  取消订阅！", Toast.LENGTH_SHORT).show();
         }
         //同步更新数据库和listview
         RSSdal.updateSubscribeStatus(RSSfinds.get((int)v.getTag()).getId(),RSSfinds.get((int)v.getTag()).getStatus());

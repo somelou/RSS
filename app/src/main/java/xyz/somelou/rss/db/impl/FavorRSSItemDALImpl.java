@@ -51,14 +51,14 @@ public class FavorRSSItemDALImpl extends BaseDALImpl implements FavorRSSItemDAL 
     @Override
     public long insertOneData(String url,String titleName,String description) {
         db=databaseHelper.getWritableDatabase();
-        String sql="INSERT INTO STU VALUES (null,?,?,?,?)";
+        String sql="INSERT INTO "+TABLE_NAME+" VALUES (null,?,?,?,?)";
 
         SQLiteStatement statement=db.compileStatement(sql);
         statement.clearBindings();
-        statement.bindString(2,url);
-        statement.bindString(3,titleName);
-        statement.bindString(4,description);
-        statement.bindString(5,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        statement.bindString(1,url);
+        statement.bindString(2,titleName);
+        statement.bindString(3,description);
+        statement.bindString(4,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
         long result=statement.executeInsert();
         db.close();
