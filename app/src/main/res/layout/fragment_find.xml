@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".find.FindFragment"
-    android:descendantFocusability="afterDescendants">
+    android:descendantFocusability="afterDescendants"
+
+    >
     <!-- 必须设置descendantFocusability属性为afterDescendants，否则子控件无法获取焦点-->
     <!-- TODO: Update blank fragment layout -->
 

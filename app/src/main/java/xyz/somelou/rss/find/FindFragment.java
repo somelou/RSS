@@ -5,23 +5,29 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import xyz.somelou.rss.R;
 import xyz.somelou.rss.adapter.RSSFindAdapter;
 import xyz.somelou.rss.bean.RSSUrl;
 import xyz.somelou.rss.db.impl.RSSUrlDALImpl;
 import xyz.somelou.rss.enums.SubscribeStatus;
+import xyz.somelou.rss.utils.SwitchGroupUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,7 +51,10 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
     private RSSFindAdapter RSSadapter;
     private RSSUrlDALImpl RSSdal;
     private ListView lv;
+    private int MID;//数据库ID
+    private SwitchGroupUtil switchGroupUtil;
     View contentView;
+
     public FindFragment() {
         // Required empty public constructor
     }
@@ -93,6 +102,8 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
         RSSadapter=new RSSFindAdapter(getContext(),RSSfinds,this);
         lv=contentView.findViewById(R.id.findlist);
         lv.setAdapter(RSSadapter);
+        registerForContextMenu(lv);
+        switchGroupUtil=new SwitchGroupUtil(getContext());//工具类初始化
         return contentView;
 
     }
@@ -175,8 +186,92 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
 
     }
 
-    //设置RSS的分组
-    public void setRSSGroup(){
+    //长按回调菜单函数
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        lv .setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+
+                    public void onCreateContextMenu(ContextMenu menu, View v,
+                                                    ContextMenu.ContextMenuInfo menuInfo) {
+
+                        // 返回包含了listView中被选中的Item的信息对象
+                        AdapterView.AdapterContextMenuInfo am = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+                        //获取点中的item
+                        View item = am.targetView;
+                        int id=am.position+1;
+                        //获取item名字
+
+                        TextView itemName = (TextView) item.findViewById(R.id.RSSTitle);
+
+                        menu.setHeaderTitle(itemName.getText());
+                        menu.add(0, 0, 0, "分组“"+RSSdal.getOneData(id).getGroupName()+"”");
+                        menu.add(0, 1, 0, "更改分组");
+
+
+                    }
+                });
+    }
+    //选择菜单动作
+    public boolean onContextItemSelected(MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
+                .getMenuInfo();
+        MID = (int) info.position+1;// 这里的MId对应的就是数据库中_id的值
+
+        switch (item.getItemId()) {
+            case 0:
+                // 显示分组
+                Toast toast = Toast.makeText(getContext(),RSSdal.getOneData(MID).getGroupName(), Toast.LENGTH_LONG);
+                toast.show();
+                break;
+
+            case 1:
+                // 更改分组
+                Toast.makeText(getContext(), "更改分组",
+                    Toast.LENGTH_SHORT).show();
+                showChoise();
+                break;
+
+            default:
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    //选择分组动作函数
+    private void showChoise()
+    {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),android.R.style.Theme_Holo_Light_Dialog);
+        //builder.setIcon(R.drawable.ic_launcher);
+        builder.setTitle("选择一个分组");
+        //    指定下拉列表的显示数据
+        List<String> groupNames= switchGroupUtil.getGroupNames();
+        final String [] groups=groupNames.toArray(new String[groupNames.size()]);
+        //    设置一个下拉的列表选择项
+        builder.setItems(groups, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                Toast.makeText(getContext(), "选择的分组为：" + groups[which], Toast.LENGTH_SHORT).show();
+                RSSdal.updateGroupName(MID,"" + groups[which]);
+            }
+        });
+        builder.show();
+    }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getActivity(), "第" + i + "行", Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
+
 }
