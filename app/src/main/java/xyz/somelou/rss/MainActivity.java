@@ -72,10 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 menuItem = bottomNavigationView.getMenu().getItem(position);
                 menuItem.setChecked(true);
-//                FragmentManager fm = getSupportFragmentManager();
-//
-//                // fm.getFragments(),当点了第三页时，再回来，返回值的内容就不同了，ListStuFragment和StudentFragment的顺序发生了改变
-//                List<Fragment> fragments = fm.getFragments();
             }
 
             @Override

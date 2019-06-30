@@ -130,7 +130,7 @@ public class RSSUtil {
         connection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
         String contentEncoding = connection.getHeaderField("Content-Encoding");
         if (contentEncoding != null && contentEncoding.contains("gzip")) {
-            System.out.println("content encoding is gzip");
+            // System.out.println("content encoding is gzip");
             GZIPInputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
             feed = input.build(new XmlReader(gzipInputStream));
         } else {

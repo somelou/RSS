@@ -47,6 +47,13 @@ public class FavorRSSItemDALImpl extends BaseDALImpl implements FavorRSSItemDAL 
         return getDataFromCursor(cursor);
     }
 
+    @Override
+    public boolean isFavor(String itemUrl) {
+        String sql = "SELECT * FROM "+TABLE_NAME+" WHERE url = '"+itemUrl+"';";
+        Cursor cursor=getData(sql);
+        return getDataFromCursor(cursor)!=null;
+    }
+
     @SuppressLint("SimpleDateFormat")
     @Override
     public long insertOneData(String url,String titleName,String description) {
