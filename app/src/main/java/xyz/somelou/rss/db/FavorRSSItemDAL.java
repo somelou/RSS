@@ -52,8 +52,15 @@ public interface FavorRSSItemDAL {
     /**
      * 取消收藏
      * @param id 选中项的id
-     * @return 一项item
+     * @return 是否删除成功
      */
     int deleteOneData(Integer id);
+
+    /**
+     * 取消收藏
+     * @param itemUrl string
+     * @return 是否删除成功
+     */
+    int deleteOneData(String itemUrl);
 
 }

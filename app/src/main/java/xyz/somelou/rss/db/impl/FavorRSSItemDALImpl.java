@@ -86,6 +86,20 @@ public class FavorRSSItemDALImpl extends BaseDALImpl implements FavorRSSItemDAL 
         return result;
     }
 
+    @Override
+    public int deleteOneData(String itemUrl) {
+        db=databaseHelper.getWritableDatabase();
+
+        String sql = "DELETE FROM "+TABLE_NAME+" WHERE url = ?";
+        SQLiteStatement statement = db.compileStatement(sql);
+        statement.clearBindings();
+        statement.bindString(1, itemUrl);
+
+        int result=statement.executeUpdateDelete();
+        db.close();
+        return result;
+    }
+
     private ArrayList<FavorRSSItem> getDataFromCursor(ArrayList<FavorRSSItem> favorRSSItems, Cursor cursor){
         //让游标从表头游到表尾,并把数据存放到list中
         while (cursor.moveToNext()) {
