@@ -47,6 +47,7 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
     private String mParam2;
 
     EditText key_word;//检索关键词
+    EditText group_name;//输入分组名
     private ArrayList<RSSUrl> RSSfinds;
     private RSSFindAdapter RSSadapter;
     private RSSUrlDALImpl RSSdal;
@@ -211,6 +212,7 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
                         menu.setHeaderTitle(itemName.getText());
                         menu.add(0, 0, 0, "分组“"+RSSdal.getOneData(id).getGroupName()+"”");
                         menu.add(0, 1, 0, "更改分组");
+                        menu.add(0, 2, 0, "添加至新分组");
 
 
                     }
@@ -235,6 +237,12 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
                 Toast.makeText(getContext(), "更改分组",
                     Toast.LENGTH_SHORT).show();
                 showChoise();
+                break;
+            case 2:
+                // 更改分组
+                Toast.makeText(getContext(), "添加至新分组",
+                        Toast.LENGTH_SHORT).show();
+               createGroup();
                 break;
 
             default:
@@ -274,6 +282,33 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
                 Toast.makeText(getActivity(), "第" + i + "行", Toast.LENGTH_LONG).show();
             }
         });
+
+    }
+
+    //
+    //创建分组
+    public void createGroup(){
+        group_name = new EditText(getContext());
+        AlertDialog.Builder dialog=new AlertDialog.Builder(getContext());
+        //设置标题，图标，视图
+        dialog.setTitle("请输入分组名称")
+                .setIcon(android.R.drawable.sym_def_app_icon)
+                .setView(group_name)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (group_name.getText().toString() != null) {
+                            RSSdal.updateGroupName(MID,group_name.getText().toString().trim());
+                        }
+
+                    }
+                }).setNegativeButton("取消", null);
+        //先显示对话框
+        dialog.show();
+        group_name.setFocusable(true);
+        group_name.setFocusableInTouchMode(true);
+        //请求获得焦点
+        group_name.requestFocus();
 
     }
 

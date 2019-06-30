@@ -47,6 +47,13 @@ public class FavorRSSItemDALImpl extends BaseDALImpl implements FavorRSSItemDAL 
         return getDataFromCursor(cursor);
     }
 
+    @Override
+    public boolean isFavor(String itemUrl) {
+        String sql = "SELECT * FROM "+TABLE_NAME+" WHERE url = '"+itemUrl+"';";
+        Cursor cursor=getData(sql);
+        return getDataFromCursor(cursor)!=null;
+    }
+
     @SuppressLint("SimpleDateFormat")
     @Override
     public long insertOneData(String url,String titleName,String description) {
@@ -73,6 +80,20 @@ public class FavorRSSItemDALImpl extends BaseDALImpl implements FavorRSSItemDAL 
         SQLiteStatement statement = db.compileStatement(sql);
         statement.clearBindings();
         statement.bindLong(1, id);
+
+        int result=statement.executeUpdateDelete();
+        db.close();
+        return result;
+    }
+
+    @Override
+    public int deleteOneData(String itemUrl) {
+        db=databaseHelper.getWritableDatabase();
+
+        String sql = "DELETE FROM "+TABLE_NAME+" WHERE url = ?";
+        SQLiteStatement statement = db.compileStatement(sql);
+        statement.clearBindings();
+        statement.bindString(1, itemUrl);
 
         int result=statement.executeUpdateDelete();
         db.close();

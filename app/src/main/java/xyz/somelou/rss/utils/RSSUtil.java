@@ -50,14 +50,14 @@ public class RSSUtil {
         getRSSData(uri);
     }
 
-    public void setRssUrl(String rssUrl) {
-        getRSSData(rssUrl);
+    public String setRssUrl(String rssUrl) {
+        return getRSSData(rssUrl);
     }
 
     /**
      * 新线程
      */
-    private void getRSSData(final String rssUrl) {
+    private String getRSSData(final String rssUrl) {
         final CountDownLatch cdl = new CountDownLatch(1);
         new Thread(new Runnable() {
             @Override
@@ -70,7 +70,9 @@ public class RSSUtil {
             cdl.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            return "failed";
         }
+        return "success";
     }
 
     /**
@@ -111,7 +113,6 @@ public class RSSUtil {
         SyndFeedInput input = new SyndFeedInput();
         ByteArrayInputStream inputStream = new ByteArrayInputStream(urlXml.getBytes(StandardCharsets.UTF_8));
         feed = input.build(new XmlReader(inputStream));
-
         //setData(feed);
     }
 
@@ -130,7 +131,7 @@ public class RSSUtil {
         connection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
         String contentEncoding = connection.getHeaderField("Content-Encoding");
         if (contentEncoding != null && contentEncoding.contains("gzip")) {
-            System.out.println("content encoding is gzip");
+            // System.out.println("content encoding is gzip");
             GZIPInputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
             feed = input.build(new XmlReader(gzipInputStream));
         } else {

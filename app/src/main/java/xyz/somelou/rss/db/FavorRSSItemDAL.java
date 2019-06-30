@@ -34,6 +34,13 @@ public interface FavorRSSItemDAL {
     FavorRSSItem getOneData(Integer id);
 
     /**
+     * 判断是否收藏
+     * @param itemUrl item的链接
+     * @return true：收藏；false，未收藏
+     */
+    boolean isFavor(String itemUrl);
+
+    /**
      * 收藏
      * @param url 该item的url
      * @param titleName 标题
@@ -45,8 +52,15 @@ public interface FavorRSSItemDAL {
     /**
      * 取消收藏
      * @param id 选中项的id
-     * @return 一项item
+     * @return 是否删除成功
      */
     int deleteOneData(Integer id);
+
+    /**
+     * 取消收藏
+     * @param itemUrl string
+     * @return 是否删除成功
+     */
+    int deleteOneData(String itemUrl);
 
 }
