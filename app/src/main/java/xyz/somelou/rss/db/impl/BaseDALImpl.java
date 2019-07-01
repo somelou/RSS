@@ -53,16 +53,17 @@ public class BaseDALImpl {
             // 插入一些rss源
             // 问题1：必须要和表的column数量一致，不能插入不饱和数据
             // 2：string的拼接
-            String INSERT_RSS_URL =
-                    "INSERT INTO RSS_URL SELECT 1 AS 'url_id','" + rssUtil.getTitleName() + "' AS 'name', '"
-                            + RSS_URL_ARRAY[0] + "' AS 'url' ,'' AS 'GROUP_NAME','NO_SUBSCRIBE' AS 'status' ";
+            StringBuilder INSERT_RSS_URL =new StringBuilder();
+            INSERT_RSS_URL.append("INSERT INTO RSS_URL SELECT 1 AS 'url_id','").append(rssUtil.getTitleName()).append("' AS 'name', '")
+                            .append(RSS_URL_ARRAY[0]).append("' AS 'url' ,'' AS 'GROUP_NAME','NO_SUBSCRIBE' AS 'status' ");
             for (int i = 1; i < RSS_URL_ARRAY.length; i++) {
                 rssUtil.setRssUrl(RSS_URL_ARRAY[i]);
-                INSERT_RSS_URL += "UNION SELECT " + (i + 1) + ",'" + rssUtil.getTitleName() + "','" + RSS_URL_ARRAY[i] + "','','NO_SUBSCRIBE' ";
+                INSERT_RSS_URL.append("UNION SELECT ").append(i + 1).append(",'").append(rssUtil.getTitleName()).append( "','" ).
+                        append(RSS_URL_ARRAY[i]).append( "','','NO_SUBSCRIBE' ");
             }
             System.out.println(INSERT_RSS_URL);
             db = databaseHelper.getWritableDatabase();
-            db.execSQL(INSERT_RSS_URL);
+            db.execSQL(INSERT_RSS_URL.toString());
         }
     }
 
