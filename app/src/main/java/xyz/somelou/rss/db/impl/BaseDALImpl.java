@@ -56,13 +56,14 @@ public class BaseDALImpl {
             StringBuilder INSERT_RSS_URL =new StringBuilder();
             INSERT_RSS_URL.append("INSERT INTO RSS_URL SELECT 1 AS 'url_id','").append(rssUtil.getTitleName()).append("' AS 'name', '")
                     .append(RSS_URL_ARRAY[0]).append("' AS 'url' ,'默认' AS 'GROUP_NAME'," +
-                    "'NO_SUBSCRIBE' AS 'status'，' ").append(rssUtil.getFeedSize()).append("' AS 'count'");
+                    "'NO_SUBSCRIBE' AS 'status',").append(rssUtil.getFeedSize()).append(" AS 'count'");
             for (int i = 1; i < RSS_URL_ARRAY.length; i++) {
                 rssUtil.setRssUrl(RSS_URL_ARRAY[i]);
                 INSERT_RSS_URL.append(" UNION SELECT ").append(i + 1).append(",'").append(rssUtil.getTitleName()).append( "','" ).
-                        append(RSS_URL_ARRAY[i]).append( "','','NO_SUBSCRIBE',").append(rssUtil.getFeedSize());
+                        append(RSS_URL_ARRAY[i]).append( "','默认','NO_SUBSCRIBE',").append(rssUtil.getFeedSize());
             }
             db = databaseHelper.getWritableDatabase();
+            System.out.println(INSERT_RSS_URL.toString());
             db.execSQL(INSERT_RSS_URL.toString());
         }
     }
