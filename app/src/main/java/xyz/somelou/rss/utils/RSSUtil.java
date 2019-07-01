@@ -6,6 +6,8 @@ package xyz.somelou.rss.utils;
  * @date 2019-06-25
  */
 
+import android.util.Log;
+
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
@@ -44,6 +46,8 @@ public class RSSUtil {
 
     private SyndFeed feed;
 
+    private Boolean isValidate=true;
+
     public RSSUtil(){}
 
     public RSSUtil(String uri) {
@@ -70,6 +74,7 @@ public class RSSUtil {
             cdl.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            isValidate=false;
             return "failed";
         }
         return "success";
@@ -90,14 +95,17 @@ public class RSSUtil {
                 parseFromXml(rssUrl);
             } catch (Exception e) {
                 e.printStackTrace();
+                isValidate=false;
             }
         } else {
             try {
                 parseFromUrl(rssUrl);
             } catch (IOException e) {
                 e.printStackTrace();
+                isValidate=false;
             } catch (FeedException e) {
                 e.printStackTrace();
+                isValidate=false;
             }
         }
     }
@@ -187,10 +195,12 @@ public class RSSUtil {
      * @return
      */
     public String getTitleName() {
+        Log.i("处理前的title=",feed.getTitle());
         titleName=feed.getTitle();
         if(titleName==null||titleName.isEmpty()){
             titleName="unknown";
         }
+        Log.i("处理后的title=",titleName);
         return titleName;
     }
 
@@ -208,5 +218,9 @@ public class RSSUtil {
      */
     public String getDescription() {
         return ClearStringUtil.clearDescription(feed.getDescription());
+    }
+
+    public Boolean getValidate() {
+        return isValidate;
     }
 }
