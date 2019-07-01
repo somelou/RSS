@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -279,7 +280,9 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getActivity(), "第" + i + "行", Toast.LENGTH_LONG).show();
+                /*Log.i("点击发现项",RSSfinds.get(i).getName()+RSSfinds.get(i).getId()
+                        +RSSfinds.get(i).getStatus()+RSSfinds.get(i).getGroupName()+RSSfinds.get(i).getUrl()+RSSfinds.get(i).getCount());*/
+                Toast.makeText(getActivity(), "第" + (i+1) + "行", Toast.LENGTH_SHORT).show();
             }
         });
 

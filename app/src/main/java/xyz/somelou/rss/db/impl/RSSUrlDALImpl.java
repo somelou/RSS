@@ -1,8 +1,10 @@
 package xyz.somelou.rss.db.impl;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -53,7 +55,7 @@ public class RSSUrlDALImpl extends BaseDALImpl implements RSSUrlDAL {
 
     @Override
     public ArrayList<RSSUrl> getSubscribe(ArrayList<RSSUrl> rssUrls) {
-        Cursor cursor = getData("SELECT * FROM " + TABLE_NAME + " where status='SUBSCRIBE';");
+        Cursor cursor = getData("SELECT * FROM " + TABLE_NAME + " where status='SUBSCRIBED'");
         return getDataFromCursor(rssUrls,cursor);
     }
 
@@ -75,14 +77,19 @@ public class RSSUrlDALImpl extends BaseDALImpl implements RSSUrlDAL {
     @Override
     public long insertOneData(String url, String groupName, SubscribeStatus status) {
         db=databaseHelper.getWritableDatabase();
-        String sql="INSERT INTO "+TABLE_NAME+" VALUES (null,?,?,?,?)";
+        String sql="INSERT INTO "+TABLE_NAME+" VALUES (null,?,?,?,?,?)";
 
+        RSSUtil u=new RSSUtil(url);
         SQLiteStatement statement=db.compileStatement(sql);
         statement.clearBindings();
-        statement.bindString(1,new RSSUtil(url).getTitleName());
+        statement.bindString(1,u.getTitleName());
         statement.bindString(2,url);
-        statement.bindString(3,groupName);
+        if (groupName==null||groupName.trim().equals(""))
+            statement.bindString(3,"默认");
+        else
+            statement.bindString(3,groupName);
         statement.bindString(4,status.toString());
+        statement.bindLong(5, u.getFeedSize());
 
         long result=statement.executeInsert();
         db.close();
@@ -159,10 +166,10 @@ public class RSSUrlDALImpl extends BaseDALImpl implements RSSUrlDAL {
             String url = cursor.getString(cursor.getColumnIndex("url"));
             String groupName = cursor.getString(cursor.getColumnIndex("group_name"));
             String status =cursor.getString(cursor.getColumnIndex("status"));
-
-            //System.out.println("get name:" + name + ",id:" + id + "，groupName:" + groupName+", status:"+status);
+            int count=cursor.getInt(cursor.getColumnIndex("count"));
+            //Log.i("RSSUrlDALImpl.java  ","get name:" + name + ",id:" + id + "，groupName:" + groupName+", status:"+status+",count:"+count);
             //byte[] stuPic = cursor.getBlob(cursor.getColumnIndex("pic"));
-            rssUrlArrayList.add(new RSSUrl(id, url, name,groupName,status));
+            rssUrlArrayList.add(new RSSUrl(id, url, name,groupName,status,count));
         }
         cursor.close();
         return rssUrlArrayList;
@@ -177,10 +184,9 @@ public class RSSUrlDALImpl extends BaseDALImpl implements RSSUrlDAL {
             String url = cursor.getString(cursor.getColumnIndex("url"));
             String groupName = cursor.getString(cursor.getColumnIndex("group_name"));
             String status =cursor.getString(cursor.getColumnIndex("status"));
-
-            //System.out.println("get name:" + name + ",id:" + id + "，groupName:" + groupName+", status:"+status);
-            //byte[] stuPic = cursor.getBlob(cursor.getColumnIndex("pic"));
-            rssUrl=new RSSUrl(id, url, name ,groupName,status);
+            int count=cursor.getInt(cursor.getColumnIndex("count"));
+            //Log.i("RSSUrlDALImpl当前频道文章数--",Integer.toString(count));
+            rssUrl=new RSSUrl(id, url, name ,groupName,status,count);
         }
         cursor.close();
         return rssUrl;

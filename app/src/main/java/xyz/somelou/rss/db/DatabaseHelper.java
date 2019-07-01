@@ -21,7 +21,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "name TEXT,"
             + "url TEXT,"
             + "group_name TEXT,"
-            + "status TEXT);";
+            + "status TEXT,"
+            + "count integer);";//增加文章数
 
     // 收藏item
     private final static String CREATE_FAVOR_RSS_ITEM_TABLE = "create table if not exists FAVOR_RSS_ITEM ("
