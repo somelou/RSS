@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import xyz.somelou.rss.R;
 import xyz.somelou.rss.db.DatabaseHelper;
@@ -55,12 +56,14 @@ public class BaseDALImpl {
             // 2：string的拼接
             String INSERT_RSS_URL =
                     "INSERT INTO RSS_URL SELECT 1 AS 'url_id','" + rssUtil.getTitleName() + "' AS 'name', '"
-                            + RSS_URL_ARRAY[0] + "' AS 'url' ,'' AS 'GROUP_NAME','NO_SUBSCRIBE' AS 'status' ";
+                            + RSS_URL_ARRAY[0] + "' AS 'url' ,'默认' AS 'GROUP_NAME','NO_SUBSCRIBE' AS 'status',' "+Integer.toString(rssUtil.getFeedSize())+"' AS 'count'";
             for (int i = 1; i < RSS_URL_ARRAY.length; i++) {
                 rssUtil.setRssUrl(RSS_URL_ARRAY[i]);
-                INSERT_RSS_URL += "UNION SELECT " + (i + 1) + ",'" + rssUtil.getTitleName() + "','" + RSS_URL_ARRAY[i] + "','','NO_SUBSCRIBE' ";
+                //Log.i("测试预设RSS",rssUtil.getValidate().toString());
+                INSERT_RSS_URL += "UNION SELECT " + (i + 1) + ",'" + rssUtil.getTitleName() + "','"
+                        + RSS_URL_ARRAY[i] + "','默认','NO_SUBSCRIBE',' "+Integer.toString(rssUtil.getFeedSize())+"'";
+                //Log.i("title=",(i + 1)+ "  "+ rssUtil.getTitleName());
             }
-            System.out.println(INSERT_RSS_URL);
             db = databaseHelper.getWritableDatabase();
             db.execSQL(INSERT_RSS_URL);
         }
@@ -71,9 +74,6 @@ public class BaseDALImpl {
         Cursor cursor = databaseHelper.getReadableDatabase().rawQuery(num, null);
         while (cursor.moveToNext()) {
             int result = cursor.getInt(cursor.getColumnIndex("count(*)"));
-            System.out.println("num:" );
-            // .getColumnIndex("count(*)")));
-            // result=0 -> true(空）; result=1 -> true(不空）
             isEmpty = ( result== 0);
         }
         cursor.close();
