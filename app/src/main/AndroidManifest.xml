@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="xyz.somelou.rss">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,8 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".my.myGroup.MyGroupRecyclerActivity"
-            android:label="LinearLayoutManager"/>
+        <activity
+            android:name=".my.myGroup.MyGroupRecyclerActivity"
+            android:label="LinearLayoutManager" />
+        <activity android:name=".subscribe.Channel.ChannelActivity"></activity>
     </application>
 
 </manifest>
