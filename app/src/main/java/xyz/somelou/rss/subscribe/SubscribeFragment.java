@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,9 +17,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import xyz.somelou.rss.R;
 import xyz.somelou.rss.adapter.RSSSubscribeAdapter;
@@ -28,6 +31,7 @@ import xyz.somelou.rss.db.impl.RSSUrlDALImpl;
 import xyz.somelou.rss.enums.SubscribeStatus;
 import xyz.somelou.rss.subscribe.channel.ChannelActivity;
 import xyz.somelou.rss.utils.RSSUtil;
+import xyz.somelou.rss.utils.SwitchGroupUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,8 +49,11 @@ public class SubscribeFragment extends Fragment {
     private ListView lv;
     private View contentView;
     private  EditText key_word;
+    private  EditText group_name;
     private RSSUtil util;
     private Boolean isPrepared = false;//标志是否初始化
+    private int MID;//数据库ID
+    private SwitchGroupUtil switchGroupUtil;
 
     public SubscribeFragment() {
         // Required empty public constructor
@@ -94,6 +101,7 @@ public class SubscribeFragment extends Fragment {
         util=new RSSUtil();
         //Log.i("默认validate",util.getValidate().toString());
         pages=new ArrayList<>();
+        registerForContextMenu(lv);
         return contentView;
 
     }
@@ -201,6 +209,138 @@ public class SubscribeFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    //
+    //长按回调菜单函数
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        lv .setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+
+            public void onCreateContextMenu(ContextMenu menu, View v,
+                                            ContextMenu.ContextMenuInfo menuInfo) {
+
+                // 返回包含了listView中被选中的Item的信息对象
+                AdapterView.AdapterContextMenuInfo am = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+                //获取点中的item
+                View item = am.targetView;
+                //获取item名字
+
+                TextView itemName = (TextView) item.findViewById(R.id.SubTitle);
+                switchGroupUtil=new SwitchGroupUtil(getContext());//工具类初始化
+                switchGroupUtil.setIDbyName(itemName.getText().toString().trim());
+                MID=switchGroupUtil.getID();
+                menu.setHeaderTitle(itemName.getText());
+
+                menu.add(0, 0, 0, "更改分组");
+                menu.add(0, 4, 0, "添加至新分组");
+                menu.add(0, 2, 0, "取消订阅");
+                menu.add(0, 3, 0, "删除该项");
+
+            }
+        });
+    }
+    //选择菜单动作
+    public boolean onContextItemSelected(MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
+                .getMenuInfo();
+
+        switch (item.getItemId()) {
+
+            case 0:
+                // 更改分组
+                Toast.makeText(getContext(), "更改分组",
+                        Toast.LENGTH_SHORT).show();
+                showChoise();
+
+                break;
+
+            case 4:
+                // 添加至新分组
+                Toast.makeText(getContext(), "添加至新分组",
+                        Toast.LENGTH_SHORT).show();
+                createGroup();
+
+                break;
+
+            case 2:
+                // 取消订阅
+                RSSdal.updateSubscribeStatus(MID,SubscribeStatus.NO_SUBSCRIBE);
+                flushSubscribe();
+                Toast.makeText(getContext(), "取消成功",
+                        Toast.LENGTH_SHORT).show();
+                break;
+
+            case 3:
+                // 删除该订阅
+                RSSdal.deleteOneData(MID);
+                flushSubscribe();
+                Toast.makeText(getContext(), "删除成功",
+                        Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
+                break;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    //选择分组动作函数
+    private void showChoise()
+    {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),android.R.style.Theme_Holo_Light_Dialog);
+        //builder.setIcon(R.drawable.ic_launcher);
+        builder.setTitle("选择一个分组");
+        //    指定下拉列表的显示数据
+        switchGroupUtil=new SwitchGroupUtil(getContext());//工具类初始化
+        List<String> groupNames= switchGroupUtil.getGroupNames();
+        final String [] groups=groupNames.toArray(new String[groupNames.size()]);
+        //    设置一个下拉的列表选择项
+        builder.setItems(groups, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                Toast.makeText(getContext(), "选择的分组为：" + groups[which], Toast.LENGTH_SHORT).show();
+                RSSdal.updateGroupName(MID,"" + groups[which]);
+                flushSubscribe();
+            }
+        });
+        builder.show();
+
+    }
+
+    //创建分组
+    public void createGroup(){
+        group_name = new EditText(getContext());
+        AlertDialog.Builder dialog=new AlertDialog.Builder(getContext());
+        //设置标题，图标，视图
+        dialog.setTitle("请输入分组名称")
+                .setIcon(android.R.drawable.sym_def_app_icon)
+                .setView(group_name)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (group_name.getText().toString() != null) {
+                            RSSdal.updateGroupName(MID,group_name.getText().toString().trim());
+                        }
+                        adapter.notifyDataSetChanged();
+                        flushSubscribe();
+
+                    }
+                }).setNegativeButton("取消", null);
+        //先显示对话框
+        dialog.show();
+        group_name.setFocusable(true);
+        group_name.setFocusableInTouchMode(true);
+        //请求获得焦点
+        group_name.requestFocus();
+        flushSubscribe();
     }
 
 }
