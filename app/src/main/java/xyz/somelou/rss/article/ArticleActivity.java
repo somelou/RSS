@@ -49,7 +49,7 @@ public class ArticleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//隐藏标题栏
         setContentView(R.layout.activity_article);
         rssUtil = new RSSUtil(getIntent().getStringExtra("url"));
         articlePosition=getIntent().getIntExtra("position",0);
@@ -59,15 +59,10 @@ public class ArticleActivity extends AppCompatActivity {
             System.out.println("收藏数据库为空！");
         else {
             for (int i = 0; i < dblist.size(); i++)
-                System.out.println("当前为收藏列表第" + i + "个，url为" + dblist.get(i).getItemUrl());
+                System.out.println("当前为收藏列表第" + (i + 1) + "个，url为" + dblist.get(i).getItemUrl() + "收藏时间为" + dblist.get(i).getFavorTime());
         }
-        //getSupportActionBar().hide();
+        getSupportActionBar().hide();
         initViews();
-
-        //左侧添加一个默认的返回图标
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        //设置返回键可用
-        getSupportActionBar().setHomeButtonEnabled(true);
 
     }
 
@@ -93,10 +88,10 @@ public class ArticleActivity extends AppCompatActivity {
         textView_content = findViewById(R.id.article_content);
         textView_author = findViewById(R.id.subscription_name);
 
-        textView_author.setText(list.get(0).getAuthor().toString());
+        textView_author.setText(list.get(articlePosition).getAuthor().toString());
         //textView_content.setText(list.get(0).getDescription());
-        textView_date.setText( list.get(0).getPubDate().toString());
-        textView_title.setText(list.get(0).getTitle().toString());
+        textView_date.setText(list.get(articlePosition).getPubDate().toString());
+        textView_title.setText(list.get(articlePosition).getTitle().toString());
 
 
         //支持javascript
@@ -146,7 +141,7 @@ public class ArticleActivity extends AppCompatActivity {
 
         });
 
-        textView_content.loadUrl(rssUtil.getRssItemBeans().get(2).getLink());
+        textView_content.loadUrl(list.get(articlePosition).getUri());
         //textView_content.loadDataWithBaseURL(null, list.get(0).getUri().toString(), "text/html", "utf-8", null);
 
         mToolbar =  findViewById(R.id.toolbar);
@@ -154,7 +149,7 @@ public class ArticleActivity extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();//返回
+                ArticleActivity.this.finish();//返回
             }
         });
 
@@ -176,14 +171,13 @@ public class ArticleActivity extends AppCompatActivity {
                         //System.out.println("测试:  url--" + list.get(0).getUri() + " title--" + list.get(0).getTitle() + "  discription--" + list.get(0).getDescription());
                         break;
                     case R.id.action_fav:
-                        if(list.get(0)!=null) {
-                            if(favorRSSItemDAL.isFavor(list.get(0).getLink()))
+                        if (favorRSSItemDAL.isFavor(list.get(articlePosition).getUri()))
                             {
                                 item.setIcon(R.drawable.ic_star_border_white_24dp);
-                                favorRSSItemDAL.deleteOneData(list.get(0).getUri());
+                                favorRSSItemDAL.deleteOneData(list.get(articlePosition).getUri());
                                 Toast.makeText(ArticleActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
-                            }else
-                                favorRSSItemDAL.insertOneData(list.get(0).getUri(), list.get(0).getTitle(), list.get(0).getDescription());
+                            } else {
+                            favorRSSItemDAL.insertOneData(list.get(articlePosition).getUri(), list.get(articlePosition).getTitle(), list.get(articlePosition).getDescription());
                             item.setIcon(R.drawable.ic_star_white_24dp);
                             Toast.makeText(ArticleActivity.this, "已收藏", Toast.LENGTH_SHORT).show();
                         }

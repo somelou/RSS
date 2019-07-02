@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="xyz.somelou.rss.subscribe.Channel.ChannelActivity">
+    tools:context="xyz.somelou.rss.subscribe.channel.ChannelActivity">
     <ListView
         android:id="@+id/PassageList"
         android:layout_width="match_parent"

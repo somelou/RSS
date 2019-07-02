@@ -51,7 +51,7 @@ public class FavorRSSItemDALImpl extends BaseDALImpl implements FavorRSSItemDAL 
     public boolean isFavor(String itemUrl) {
         String sql = "SELECT * FROM "+TABLE_NAME+" WHERE url = '"+itemUrl+"';";
         Cursor cursor=getData(sql);
-        return getDataFromCursor(cursor)!=null;
+        return getDataFromCursor(cursor) != null;
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -134,5 +134,15 @@ public class FavorRSSItemDALImpl extends BaseDALImpl implements FavorRSSItemDAL 
         }
         cursor.close();
         return rssUrl;
+    }
+
+    //删除所有数据但保留表
+    public int deleteAllData() {
+        db = databaseHelper.getWritableDatabase();
+        String sql = "DELETE FROM " + TABLE_NAME;
+        SQLiteStatement statement = db.compileStatement(sql);
+        int result = statement.executeUpdateDelete();
+        db.close();
+        return result;
     }
 }

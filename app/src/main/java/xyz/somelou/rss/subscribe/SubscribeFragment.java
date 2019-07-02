@@ -26,7 +26,7 @@ import xyz.somelou.rss.bean.RSSItemBean;
 import xyz.somelou.rss.bean.RSSUrl;
 import xyz.somelou.rss.db.impl.RSSUrlDALImpl;
 import xyz.somelou.rss.enums.SubscribeStatus;
-import xyz.somelou.rss.subscribe.Channel.ChannelActivity;
+import xyz.somelou.rss.subscribe.channel.ChannelActivity;
 import xyz.somelou.rss.utils.RSSUtil;
 
 /**

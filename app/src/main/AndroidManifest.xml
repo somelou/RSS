@@ -22,8 +22,8 @@
         <activity
             android:name=".my.myGroup.MyGroupRecyclerActivity"
             android:label="LinearLayoutManager" />
-        <activity android:name=".subscribe.Channel.ChannelActivity" />
-        <activity android:name=".article.ArticleActivity"></activity>
+        <activity android:name=".subscribe.channel.ChannelActivity" />
+        <activity android:name=".article.ArticleActivity" />
     </application>
 
 </manifest>

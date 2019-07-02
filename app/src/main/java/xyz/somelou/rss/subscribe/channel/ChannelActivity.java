@@ -1,4 +1,4 @@
-package xyz.somelou.rss.subscribe.Channel;
+package xyz.somelou.rss.subscribe.channel;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,16 +7,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import xyz.somelou.rss.R;
 import xyz.somelou.rss.adapter.RSSChannelAdapter;
 import xyz.somelou.rss.article.ArticleActivity;
 import xyz.somelou.rss.bean.RSSItemBean;
-import xyz.somelou.rss.bean.RSSUrl;
 import xyz.somelou.rss.utils.RSSUtil;
 
 public class ChannelActivity extends AppCompatActivity {
@@ -53,7 +50,7 @@ public class ChannelActivity extends AppCompatActivity {
                 goToArticle.putExtra("url",url);
                 goToArticle.putExtra("position",position);
                 startActivity(goToArticle);
-                //Log.i("--ChannelActivity","点击了第"+(position+1)+"篇文章");
+                Log.i("--ChannelActivity", "点击了第" + (position + 1) + "篇文章");
             }
         });
         super.onCreate(savedInstanceState);
