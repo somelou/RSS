@@ -46,6 +46,7 @@ public class SubscribeFragment extends Fragment {
     private View contentView;
     private  EditText key_word;
     private RSSUtil util;
+    private Boolean isPrepared = false;//标志是否初始化
 
     public SubscribeFragment() {
         // Required empty public constructor
@@ -76,6 +77,7 @@ public class SubscribeFragment extends Fragment {
 
         // Inflate the layout for this fragment
         contentView=inflater.inflate(R.layout.fragment_subscribe, container, false);
+        isPrepared = true;
         //初始化页面
         RSSdal=new RSSUrlDALImpl(getContext());
         subs=RSSdal.getSubscribe(new ArrayList<RSSUrl>());//获取已订阅的频道
@@ -144,18 +146,23 @@ public class SubscribeFragment extends Fragment {
                 break;
             case R.id.subscribe_menu_refresh:
                 //手动刷新
-                subs.clear();
-                subs.addAll(RSSdal.getSubscribe(new ArrayList<RSSUrl>()));
-                adapter.notifyDataSetChanged();
+                flushSubscribe();
                 Toast.makeText(getActivity(),"刷新成功", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void flushSubscribe() {
+        subs.clear();
+        subs.addAll(RSSdal.getSubscribe(new ArrayList<RSSUrl>()));
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setUserVisibleHint(true);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -163,14 +170,25 @@ public class SubscribeFragment extends Fragment {
                 Intent goToChannel=new Intent(getActivity(), ChannelActivity.class);
                 //传频道标题和所有文章
                 util.setRssUrl(subs.get(i).getUrl());//先设置网址进行解析
-                pages= (ArrayList)util.getRssItemBeans();//再保存文章
-                goToChannel.putExtra("pages",pages);
+                //pages= (ArrayList)util.getRssItemBeans();//再保存文章
+                //goToChannel.putExtra("pages",pages);
                 goToChannel.putExtra("url",subs.get(i).getUrl());
                 goToChannel.putExtra("title",subs.get(i).getName());
                 startActivity(goToChannel);
                 //Toast.makeText(getActivity(), "第" + (i+1) + "行", Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        //可见且已初始化
+        if (isPrepared && isVisibleToUser) {
+            flushSubscribe();
+        }
+        Log.i("setUserVisibleHint", "SubScribeFragment被加载");
 
     }
 
