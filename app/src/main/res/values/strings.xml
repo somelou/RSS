@@ -7,4 +7,7 @@
     <string name="RSSdescription">这是RSS图标</string>
     <string name="find_menu_search">搜索</string>
     <string name="find_menu_refresh">刷新</string>
+    <string name="share">Share</string>
+    <string name="fav">Favorite</string>
+    <string name="link">Open Article Link</string>
 </resources>

@@ -14,6 +14,7 @@ import java.util.List;
 
 import xyz.somelou.rss.R;
 import xyz.somelou.rss.adapter.RSSChannelAdapter;
+import xyz.somelou.rss.article.ArticleActivity;
 import xyz.somelou.rss.bean.RSSItemBean;
 import xyz.somelou.rss.bean.RSSUrl;
 import xyz.somelou.rss.utils.RSSUtil;
@@ -32,6 +33,7 @@ public class ChannelActivity extends AppCompatActivity {
         setContentView(R.layout.activity_channel);
         //先接收intent
         setTitle(RSSchannel=getIntent().getStringExtra("title"));//设置activity标题
+        url=getIntent().getStringExtra("url");
         this.setTitle(RSSchannel);
         passages=(ArrayList<RSSItemBean>) getIntent().getSerializableExtra("pages");
         //测试
@@ -47,10 +49,11 @@ public class ChannelActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*Intent goToArticle=new Intent(this,文章界面);
-                goToArticle.putParcelableArrayListExtra("pages",passages);
-                startActivity(goToArticle);*/
-                Log.i("--ChannelActivity","点击了第"+(position+1)+"篇文章");
+                Intent goToArticle=new Intent(ChannelActivity.this, ArticleActivity.class);
+                goToArticle.putExtra("url",url);
+                goToArticle.putExtra("position",position);
+                startActivity(goToArticle);
+                //Log.i("--ChannelActivity","点击了第"+(position+1)+"篇文章");
             }
         });
         super.onCreate(savedInstanceState);

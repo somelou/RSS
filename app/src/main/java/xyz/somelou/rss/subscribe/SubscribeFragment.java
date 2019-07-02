@@ -165,6 +165,7 @@ public class SubscribeFragment extends Fragment {
                 util.setRssUrl(subs.get(i).getUrl());//先设置网址进行解析
                 pages= (ArrayList)util.getRssItemBeans();//再保存文章
                 goToChannel.putExtra("pages",pages);
+                goToChannel.putExtra("url",subs.get(i).getUrl());
                 goToChannel.putExtra("title",subs.get(i).getName());
                 startActivity(goToChannel);
                 //Toast.makeText(getActivity(), "第" + (i+1) + "行", Toast.LENGTH_SHORT).show();
