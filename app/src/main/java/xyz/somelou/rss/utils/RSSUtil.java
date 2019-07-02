@@ -20,6 +20,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.zip.GZIPInputStream;
@@ -158,7 +159,15 @@ public class RSSUtil {
             item.setTitle(entry.getTitle().trim());
             item.setType(feed.getTitleEx().getValue().trim());
             item.setUri(entry.getUri());
-            item.setPubDate(entry.getPublishedDate());
+            /*if (entry.getPublishedDate().toString()==null){
+                item.setPubDate(new Date());
+                Log.i("RSSUtil---","第"+i+"个文章发布日期为空");
+            }
+
+            else{*/
+                item.setPubDate(entry.getPublishedDate());
+            //Log.i("RSSUtil---","第"+i+"个文章,发布日期:"+item.getPubDate().toString());
+
             item.setAuthor(entry.getAuthor());
             // description过长时截取
             item.setDescription(ClearStringUtil.clearDescription(entry.getDescription().getValue()));

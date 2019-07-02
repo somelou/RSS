@@ -63,4 +63,6 @@ public interface FavorRSSItemDAL {
      */
     int deleteOneData(String itemUrl);
 
+    int deleteAllData();
+
 }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/passage_title"
+        android:layout_width="248dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:maxLength="40"
+        android:maxLines="2"
+        android:text="文章标题文章标题文章标题文章标题文章标题文章标题文章标题"
+        android:textAllCaps="true"
+        android:textColor="@android:color/background_dark"
+        android:textSize="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/passage_discription"
+        android:layout_width="248dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:maxLength="45"
+        android:maxLines="1"
+        android:text="文章简介文章简介文章简介文章简介文章简介文章简介文章简介文章简介文章简介文章简介文章简介文章简介"
+        android:textSize="9dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passage_title" />
+
+    <TextView
+        android:id="@+id/passage_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="1dp"
+        android:text="发布时间发布时间"
+        android:textSize="9dp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passage_discription" />
+
+    <TextView
+        android:id="@+id/passage_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="1dp"
+        android:gravity="right"
+        android:text="作者作者作者作者"
+        android:textSize="9dp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toEndOf="@+id/passage_date"
+        app:layout_constraintTop_toBottomOf="@+id/passage_discription" />
+
+    <ImageView
+        android:id="@+id/passage_icon"
+        android:layout_width="90dp"
+        android:layout_height="63dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/article" />
+</android.support.constraint.ConstraintLayout>
