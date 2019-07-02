@@ -1,8 +1,8 @@
 package xyz.somelou.rss.subscribe.channel;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,7 +32,9 @@ public class ChannelActivity extends AppCompatActivity {
         setTitle(RSSchannel=getIntent().getStringExtra("title"));//设置activity标题
         url=getIntent().getStringExtra("url");
         this.setTitle(RSSchannel);
-        passages=(ArrayList<RSSItemBean>) getIntent().getSerializableExtra("pages");
+        util = new RSSUtil(url);
+        passages = (ArrayList) util.getRssItemBeans();
+        //passages=(ArrayList<RSSItemBean>) getIntent().getSerializableExtra("pages");
         //测试
         /*passages=new ArrayList<>();
         for (int i=0;i<passages.size();i++){

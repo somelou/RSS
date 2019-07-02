@@ -1,6 +1,5 @@
 package xyz.somelou.rss.article;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
-import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -16,11 +14,11 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import xyz.somelou.rss.R;
 import xyz.somelou.rss.bean.FavorRSSItem;
@@ -29,22 +27,21 @@ import xyz.somelou.rss.db.impl.FavorRSSItemDALImpl;
 import xyz.somelou.rss.utils.IntentUtil;
 import xyz.somelou.rss.utils.RSSUtil;
 
-public class ArticleActivity extends AppCompatActivity {
-    private Toolbar mToolbar;
-    private RSSItemBean mItemBean;
-    private FavorRSSItemDALImpl favorRSSItemDAL;
+public class ArticleActivity extends AppCompatActivity implements View.OnClickListener {
     protected static final float FLIP_DISTANCE = 50;
     SmsManager smsManager=SmsManager.getDefault();
-
     TextView textView_title;
     TextView textView_author;
     TextView textView_date;
     WebView textView_content;
-
-    private int articlePosition;
     RSSUtil rssUtil;
-    GestureDetector mDetector;
     ArrayList<RSSItemBean> list;
+    private Toolbar mToolbar;
+    private RSSItemBean mItemBean;
+    private FavorRSSItemDALImpl favorRSSItemDAL;
+    private ImageButton mPreviousBtn;
+    private ImageButton mNextBtn;
+    private int articlePosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +84,11 @@ public class ArticleActivity extends AppCompatActivity {
         textView_date = findViewById(R.id.article_date);
         textView_content = findViewById(R.id.article_content);
         textView_author = findViewById(R.id.subscription_name);
+
+        mPreviousBtn = (ImageButton) findViewById(R.id.previous_btn);
+        mPreviousBtn.setOnClickListener(this);
+        mNextBtn = (ImageButton) findViewById(R.id.next_btn);
+        mNextBtn.setOnClickListener(this);
 
         textView_author.setText(list.get(articlePosition).getAuthor().toString());
         //textView_content.setText(list.get(0).getDescription());
@@ -171,12 +173,11 @@ public class ArticleActivity extends AppCompatActivity {
                         //System.out.println("测试:  url--" + list.get(0).getUri() + " title--" + list.get(0).getTitle() + "  discription--" + list.get(0).getDescription());
                         break;
                     case R.id.action_fav:
-                        if (favorRSSItemDAL.isFavor(list.get(articlePosition).getUri()))
-                            {
-                                item.setIcon(R.drawable.ic_star_border_white_24dp);
-                                favorRSSItemDAL.deleteOneData(list.get(articlePosition).getUri());
-                                Toast.makeText(ArticleActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
-                            } else {
+                        if (favorRSSItemDAL.isFavor(list.get(articlePosition).getUri())) {
+                            item.setIcon(R.drawable.ic_star_border_white_24dp);
+                            favorRSSItemDAL.deleteOneData(list.get(articlePosition).getUri());
+                            Toast.makeText(ArticleActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
+                        } else {
                             favorRSSItemDAL.insertOneData(list.get(articlePosition).getUri(), list.get(articlePosition).getTitle(), list.get(articlePosition).getDescription());
                             item.setIcon(R.drawable.ic_star_white_24dp);
                             Toast.makeText(ArticleActivity.this, "已收藏", Toast.LENGTH_SHORT).show();
@@ -204,7 +205,31 @@ public class ArticleActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onClick(View v) {
+        if (v == mPreviousBtn) {
+            if (articlePosition < 1) {
+                Toast.makeText(ArticleActivity.this, "已经是第一篇", Toast.LENGTH_SHORT).show();
+            } else {
+                articlePosition--;
+                textView_author.setText(list.get(articlePosition).getAuthor().toString());
+                textView_date.setText(list.get(articlePosition).getPubDate().toString());
+                textView_title.setText(list.get(articlePosition).getTitle().toString());
+                textView_content.loadUrl(list.get(articlePosition).getUri());
+            }
 
+        } else if (v == mNextBtn) {
+            if (articlePosition >= list.size() - 1) {
+                Toast.makeText(ArticleActivity.this, "已经是最后一篇", Toast.LENGTH_SHORT).show();
+            } else {
+                articlePosition++;
+                textView_author.setText(list.get(articlePosition).getAuthor().toString());
+                textView_date.setText(list.get(articlePosition).getPubDate().toString());
+                textView_title.setText(list.get(articlePosition).getTitle().toString());
+                textView_content.loadUrl(list.get(articlePosition).getUri());
+            }
+        }
+    }
 }
 
 
