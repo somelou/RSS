@@ -5,5 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="xyz.somelou.rss.subscribe.Channel.ChannelActivity">
+    <ListView
+        android:id="@+id/PassageList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#ffffff"
+        />
 
 </android.support.constraint.ConstraintLayout>
