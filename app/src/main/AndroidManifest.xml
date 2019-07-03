@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="xyz.somelou.rss">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,7 +12,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +23,11 @@
         </activity>
         <activity
             android:name=".my.myGroup.MyGroupRecyclerActivity"
-            android:label="LinearLayoutManager" />
-        <activity android:name=".subscribe.channel.ChannelActivity" />
-        <activity android:name=".article.ArticleActivity" />
+            android:label="LinearLayoutManager"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".subscribe.channel.ChannelActivity" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".article.ArticleActivity" android:parentActivityName=".subscribe.channel.ChannelActivity"/>
+        <activity android:name=".my.FavoritesList" android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

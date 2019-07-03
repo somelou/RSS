@@ -121,7 +121,7 @@ public class PinnedHeaderRecyclerView extends RecyclerView {
 
     public IPinnedHeaderDecoration getPinnedHeaderDecoration() {
         int decorationIndex = 0;
-        RecyclerView.ItemDecoration itemDecoration;
+        ItemDecoration itemDecoration;
         do {
             itemDecoration = getItemDecorationAt(decorationIndex);
             if (itemDecoration instanceof IPinnedHeaderDecoration) {
