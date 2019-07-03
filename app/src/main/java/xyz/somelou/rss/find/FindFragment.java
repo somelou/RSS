@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,20 +41,19 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    EditText key_word;//检索关键词
+    EditText group_name;//输入分组名
+    View contentView;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    EditText key_word;//检索关键词
-    EditText group_name;//输入分组名
     private ArrayList<RSSUrl> RSSfinds;
     private RSSFindAdapter RSSadapter;
     private RSSUrlDALImpl RSSdal;
     private ListView lv;
     private int MID;//数据库ID
     private SwitchGroupUtil switchGroupUtil;
-    View contentView;
+    private Boolean isPrepared = false;//标志是否初始化
 
     public FindFragment() {
         // Required empty public constructor
@@ -94,13 +92,10 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         contentView=inflater.inflate(R.layout.fragment_find, container, false);
+        isPrepared = true;//已经初始化
         //界面初始化
         RSSdal=new RSSUrlDALImpl(getContext());//数据库操作类
-
         RSSfinds=RSSdal.getAllData(new ArrayList<RSSUrl>());//RSS源不为空
-        /*for (int i=0;i<RSSfinds.size();i++)
-        System.out.println(RSSfinds.get(i).getUrl()+" , "+RSSfinds.get(i).getName());*/
-
         RSSadapter=new RSSFindAdapter(getContext(),RSSfinds,this);
         lv=contentView.findViewById(R.id.findlist);
         lv.setAdapter(RSSadapter);
@@ -136,9 +131,8 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
                 //清除ListView的过滤
                 lv.clearTextFilter();
                 //RSSadapter.getFilter().filter("");
-                RSSfinds.clear();
-                RSSfinds.addAll(RSSadapter.getOriginalData());
-                RSSadapter.notifyDataSetChanged();
+                flushFinds();
+
                 break;
             case R.id.find_menu_search:
                 input();
@@ -146,6 +140,14 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //刷新订阅列表
+    public void flushFinds() {
+        RSSfinds.clear();
+        RSSfinds.addAll(RSSdal.getAllData(new ArrayList<RSSUrl>()));
+        RSSadapter.notifyDataSetChanged();
+    }
+
     //输入检索关键字
     public void input(){
        key_word = new EditText(getContext());
@@ -171,6 +173,7 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
         key_word.requestFocus();
 
     }
+
 
     //重写订阅按钮点击方法
     @Override
@@ -277,6 +280,7 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setUserVisibleHint(true);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -286,6 +290,16 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
             }
         });
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        //可见且已初始化
+        if (isPrepared && isVisibleToUser) {
+            flushFinds();
+        }
+        Log.i("setUserVisibleHint", "FindFragment被加载");
     }
 
     //

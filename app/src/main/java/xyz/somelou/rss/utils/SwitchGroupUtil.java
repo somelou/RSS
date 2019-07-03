@@ -17,6 +17,7 @@ public class SwitchGroupUtil {
     private ArrayList<RSSUrl> rssUrlArrayList;
     private List<String> groupNames;
     private List<String> groupSortList;//将内容按照分组信息进行重组后的
+    private int ID;//数据库ID
     public SwitchGroupUtil(Context context){
         rssUrlDALImpl=new RSSUrlDALImpl(context);
         rssUrlArrayList=new ArrayList<>();
@@ -46,6 +47,17 @@ public class SwitchGroupUtil {
                 }
             }
         }
+    }
+
+    public void setIDbyName(String name){
+        for (RSSUrl rssUrl:rssUrlArrayList){
+            if(rssUrl.getName().equals(name))
+                ID=rssUrl.getId();
+        }
+    }
+
+    public int getID() {
+        return ID;
     }
 
     public List<String> getGroupNames() {

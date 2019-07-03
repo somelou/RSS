@@ -15,18 +15,17 @@ import xyz.somelou.rss.thread.PreDatabaseThread;
 
 public class MainActivity extends AppCompatActivity {
 
+    // 预加载数据库
+    PreDatabaseThread preDatabaseThread;
     private ViewPager viewPager;
     private MenuItem menuItem;
     private BottomNavigationView bottomNavigationView;
 
-    // 预加载数据库
-    PreDatabaseThread preDatabaseThread;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //清空收藏列表
+        //new FavorRSSItemDALImpl(this).deleteAllData();
         // 测试
         preDatabaseThread=new PreDatabaseThread(getApplicationContext());
         new Thread(preDatabaseThread).start();
