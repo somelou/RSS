@@ -60,6 +60,9 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         }
         getSupportActionBar().hide();
         initViews();
+        if (favorRSSItemDAL.isFavor(list.get(articlePosition).getUri())){
+            mToolbar.getMenu().findItem(R.id.action_fav).setIcon(R.drawable.ic_star_white_24dp);
+        }
 
     }
 
