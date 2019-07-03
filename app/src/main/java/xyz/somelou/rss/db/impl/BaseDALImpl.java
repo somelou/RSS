@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import xyz.somelou.rss.R;
 import xyz.somelou.rss.db.DatabaseHelper;
@@ -54,18 +53,18 @@ public class BaseDALImpl {
             // 插入一些rss源
             // 问题1：必须要和表的column数量一致，不能插入不饱和数据
             // 2：string的拼接
-            String INSERT_RSS_URL =
-                    "INSERT INTO RSS_URL SELECT 1 AS 'url_id','" + rssUtil.getTitleName() + "' AS 'name', '"
-                            + RSS_URL_ARRAY[0] + "' AS 'url' ,'默认' AS 'GROUP_NAME','NO_SUBSCRIBE' AS 'status',' "+Integer.toString(rssUtil.getFeedSize())+"' AS 'count'";
+            StringBuilder INSERT_RSS_URL =new StringBuilder();
+            INSERT_RSS_URL.append("INSERT INTO RSS_URL SELECT 1 AS 'url_id','").append(rssUtil.getTitleName()).append("' AS 'name', '")
+                    .append(RSS_URL_ARRAY[0]).append("' AS 'url' ,'默认' AS 'GROUP_NAME'," +
+                    "'NO_SUBSCRIBE' AS 'status',").append(rssUtil.getFeedSize()).append(" AS 'count'");
             for (int i = 1; i < RSS_URL_ARRAY.length; i++) {
                 rssUtil.setRssUrl(RSS_URL_ARRAY[i]);
-                //Log.i("测试预设RSS",rssUtil.getValidate().toString());
-                INSERT_RSS_URL += "UNION SELECT " + (i + 1) + ",'" + rssUtil.getTitleName() + "','"
-                        + RSS_URL_ARRAY[i] + "','默认','NO_SUBSCRIBE',' "+Integer.toString(rssUtil.getFeedSize())+"'";
-                //Log.i("title=",(i + 1)+ "  "+ rssUtil.getTitleName());
+                INSERT_RSS_URL.append(" UNION SELECT ").append(i + 1).append(",'").append(rssUtil.getTitleName()).append( "','" ).
+                        append(RSS_URL_ARRAY[i]).append( "','默认','NO_SUBSCRIBE',").append(rssUtil.getFeedSize());
             }
             db = databaseHelper.getWritableDatabase();
-            db.execSQL(INSERT_RSS_URL);
+            System.out.println(INSERT_RSS_URL.toString());
+            db.execSQL(INSERT_RSS_URL.toString());
         }
     }
 
