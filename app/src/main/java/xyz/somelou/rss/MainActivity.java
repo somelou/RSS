@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.addFragment(SubscribeFragment.newInstance());
         adapter.addFragment(FindFragment.newInstance("1","2"));
-        adapter.addFragment(MyFragment.newInstance());
+        adapter.addFragment(MyFragment.newInstance("1","2"));
         viewPager.setAdapter(adapter);
     }
 }

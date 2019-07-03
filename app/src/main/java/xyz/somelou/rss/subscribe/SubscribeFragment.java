@@ -132,8 +132,8 @@ public class SubscribeFragment extends Fragment {
                                     //如果rss源解析成功
                                     util.setRssUrl(rss);
                                     if (util.getValidate()){
-                                        //添加RSS到RSS表,默认不订阅
-                                        RSSdal.insertOneData(rss,null, SubscribeStatus.NO_SUBSCRIBE);
+                                        //添加RSS到RSS表,默认订阅
+                                        RSSdal.insertOneData(rss,null, SubscribeStatus.SUBSCRIBED);
                                         Log.i("-------订阅界面:","添加成功");
                                     }
                                     else{
@@ -236,7 +236,7 @@ public class SubscribeFragment extends Fragment {
 
                 menu.add(0, 0, 0, "更改分组");
                 menu.add(0, 4, 0, "添加至新分组");
-                menu.add(0, 2, 0, "取消订阅");
+                menu.add(0, 5, 0, "取消订阅");
                 menu.add(0, 3, 0, "删除该项");
 
             }
@@ -266,7 +266,7 @@ public class SubscribeFragment extends Fragment {
 
                 break;
 
-            case 2:
+            case 5:
                 // 取消订阅
                 RSSdal.updateSubscribeStatus(MID,SubscribeStatus.NO_SUBSCRIBE);
                 flushSubscribe();

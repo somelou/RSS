@@ -232,8 +232,9 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
         switch (item.getItemId()) {
             case 0:
                 // 显示分组
-                Toast toast = Toast.makeText(getContext(),RSSdal.getOneData(MID).getGroupName(), Toast.LENGTH_LONG);
-                toast.show();
+          //      Toast toast = Toast.makeText(getContext(),RSSdal.getOneData(MID).getGroupName(),
+            //        Toast.LENGTH_LONG);
+            //    toast.show();
                 break;
 
             case 1:
