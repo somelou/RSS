@@ -208,6 +208,7 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
 
                         //获取点中的item
                         View item = am.targetView;
+
                         int id=am.position+1;
                         //获取item名字
 
@@ -217,6 +218,7 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
                         menu.add(0, 0, 0, "分组“"+RSSdal.getOneData(id).getGroupName()+"”");
                         menu.add(0, 1, 0, "更改分组");
                         menu.add(0, 2, 0, "添加至新分组");
+                        menu.add(0, 3, 0, "删除此项");
 
 
                     }
@@ -248,6 +250,13 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
                 Toast.makeText(getContext(), "添加至新分组",
                         Toast.LENGTH_SHORT).show();
                createGroup();
+                break;
+
+            case 3:
+
+                //RSSdal.deleteOneData(RSSfinds.get((int)((AdapterView.AdapterContextMenuInfo)
+                // item.getMenuInfo()).id.getTag()).getId());
+                RSSadapter.notifyDataSetChanged();
                 break;
 
             default:
