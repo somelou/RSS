@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 import xyz.somelou.rss.R;
 import xyz.somelou.rss.bean.FavorRSSItem;
-import xyz.somelou.rss.bean.RSSItemBean;
 
 /**
  * Created by ${Marrrrrco} on 2019/7/3.

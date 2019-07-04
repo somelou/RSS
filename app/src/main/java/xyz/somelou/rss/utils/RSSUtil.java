@@ -16,11 +16,11 @@ import com.rometools.rome.io.XmlReader;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.zip.GZIPInputStream;
@@ -81,12 +81,36 @@ public class RSSUtil {
         return "success";
     }
 
+    public synchronized boolean isConnect(String urlStr) {
+
+        if (urlStr == null || urlStr.length() <= 0) {
+            return false;
+        }
+
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            if (con.getResponseCode() == 200) {
+                return true;
+            }
+        }catch (Exception ex) {
+            return false;
+        }
+
+        return false;
+    }
+
     /**
      * 根据不同种类的url执行不同函数
      *
      * @param rssUrl
      */
     private void doParse(String rssUrl) {
+        System.out.println(isConnect(rssUrl));
+        if(!isConnect(rssUrl)){
+            isValidate=false;
+            //return;
+        }
         if(!rssUrl.startsWith("https://")&&!rssUrl.startsWith("http://")){
             System.out.println("add https:// for url");
             rssUrl="https://"+rssUrl;
@@ -96,17 +120,14 @@ public class RSSUtil {
                 parseFromXml(rssUrl);
             } catch (Exception e) {
                 e.printStackTrace();
-                isValidate=false;
             }
         } else {
             try {
                 parseFromUrl(rssUrl);
             } catch (IOException e) {
                 e.printStackTrace();
-                isValidate=false;
             } catch (FeedException e) {
                 e.printStackTrace();
-                isValidate=false;
             }
         }
     }

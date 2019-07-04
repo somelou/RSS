@@ -1,9 +1,7 @@
 package xyz.somelou.rss.my;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,13 +12,6 @@ import xyz.somelou.rss.R;
 import xyz.somelou.rss.my.myGroup.MyGroupRecyclerActivity;
 import xyz.somelou.rss.my.myfavorite.FavoriteActivity;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link MyFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MyFragment extends Fragment {
     private Context mContext;
     // TODO: Rename parameter arguments, choose names that match
@@ -53,7 +44,6 @@ public class MyFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
