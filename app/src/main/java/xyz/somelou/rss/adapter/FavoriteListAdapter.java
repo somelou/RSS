@@ -8,19 +8,17 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 import xyz.somelou.rss.R;
-import xyz.somelou.rss.bean.RSSItemBean;
+import xyz.somelou.rss.bean.FavorRSSItem;
 
 /**
- * Created by ${Marrrrrco} on 2019/7/2.
+ * Created by ${Marrrrrco} on 2019/7/3.
  */
 
-public class RSSChannelAdapter extends BaseAdapter {
-    private ArrayList<RSSItemBean> passages;
+public class FavoriteListAdapter extends BaseAdapter {
+    private ArrayList<FavorRSSItem> passages;
     private Context context;
 
     public class ViewHolder{
@@ -31,9 +29,9 @@ public class RSSChannelAdapter extends BaseAdapter {
         public ImageView icon;//默认图标
     }
 
-    public RSSChannelAdapter(){}
+    public FavoriteListAdapter(){}
 
-    public RSSChannelAdapter(Context context,ArrayList<RSSItemBean> list){
+    public FavoriteListAdapter(Context context,ArrayList<FavorRSSItem> list){
         this.context=context;
         passages=list;
     }
@@ -75,11 +73,12 @@ public class RSSChannelAdapter extends BaseAdapter {
         }
         //设置好控件的内容
         vh.icon.setImageResource(R.mipmap.article);
-        vh.title.setText(passages.get(position).getTitle());
+        vh.title.setText(passages.get(position).getTitleName());
         vh.discription.setText(passages.get(position).getDescription());
-        vh.date.setText(passages.get(position).getPubDate().toString());
-        vh.author.setText(passages.get(position).getAuthor());
-
+        vh.date.setText(passages.get(position).getFavorTime());
+        //vh.author.setText(passages.get(position).getAuthor());
+        vh.discription.setTextColor(context.getResources().getColor(R.color.tab_unchecked));
+        vh.date.setTextColor(context.getResources().getColor(R.color.tab_unchecked));
         return convertView;
     }
 }
