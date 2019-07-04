@@ -54,7 +54,7 @@
         android:layout_marginStart="105dp"
         android:layout_marginTop="1dp"
         android:gravity="right"
-        android:text="作者作者作者作者"
+        android:text=""
         android:textSize="9dp"
         android:textStyle="italic"
         app:layout_constraintStart_toEndOf="@+id/passage_date"
