@@ -2,8 +2,8 @@ package xyz.somelou.rss.my.myfavorite;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,11 +13,9 @@ import java.util.ArrayList;
 
 import xyz.somelou.rss.R;
 import xyz.somelou.rss.adapter.FavoriteListAdapter;
-import xyz.somelou.rss.adapter.RSSChannelAdapter;
 import xyz.somelou.rss.article.ArticleActivity;
 import xyz.somelou.rss.bean.FavorRSSItem;
 import xyz.somelou.rss.db.impl.FavorRSSItemDALImpl;
-import xyz.somelou.rss.subscribe.channel.ChannelActivity;
 
 public class FavoriteActivity extends AppCompatActivity {
 
@@ -43,6 +41,7 @@ public class FavoriteActivity extends AppCompatActivity {
                 goToArticle.putExtra("position",position);
                 goToArticle.putExtra("title",favorites.get(position).getTitleName());
                 goToArticle.putExtra("discription",favorites.get(position).getDescription());
+                goToArticle.putExtra("addTime", "收藏时间:" + favorites.get(position).getFavorTime());
                 startActivity(goToArticle);
                 Log.i("--FavoriteActivity", "点击了第" + (position + 1) + "篇收藏");
             }

@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.view.MenuItem;
@@ -66,15 +65,8 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         }
         getSupportActionBar().hide();
         initViews();
-        if (favorRSSItemDAL.isFavor(list.get(articlePosition).getUri())){
-            mToolbar.getMenu().findItem(R.id.action_fav).setIcon(R.drawable.ic_star_white_24dp);
-        }
 
     }
-
-
-
-
 
 
     /**
@@ -89,30 +81,18 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
      **/
 
     private void initViews() {
+        favorRSSItemDAL = new FavorRSSItemDALImpl(this);
+        //绑定控件
         textView_title = findViewById(R.id.article_title);
         textView_date = findViewById(R.id.article_date);
         textView_content = findViewById(R.id.article_content);
         textView_author = findViewById(R.id.subscription_name);
-
         mPreviousBtn = findViewById(R.id.previous_btn);
-
         mNextBtn = findViewById(R.id.next_btn);
-
-
-        if (!isFavorite) {
-            mPreviousBtn.setOnClickListener(this);
-            mNextBtn.setOnClickListener(this);
-            textView_author.setText(list.get(articlePosition).getAuthor().toString());
-            //textView_content.setText(list.get(0).getDescription());
-            textView_date.setText(list.get(articlePosition).getPubDate().toString());
-            textView_title.setText(list.get(articlePosition).getTitle().toString());
-        }
-        else{
-            textView_author.setText("");
-            textView_date.setText("");
-            textView_title.setText(getIntent().getStringExtra("title"));
-        }
-
+        //设置action menu
+        //填充menu
+        mToolbar = findViewById(R.id.toolbar);
+        mToolbar.inflateMenu(R.menu.menu_article);
 
         //支持javascript
         textView_content.getSettings().setJavaScriptEnabled(true);
@@ -155,42 +135,39 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                         return true;
                     }
                 }
-
                 return false;
             }
-
         });
 
-        if (!isFavorite)
-        textView_content.loadUrl(list.get(articlePosition).getUri());
-        else
-            textView_content.loadUrl(getIntent().getStringExtra("url"));
-        //textView_content.loadDataWithBaseURL(null, list.get(0).getUri().toString(), "text/html", "utf-8", null);
-
-        mToolbar =  findViewById(R.id.toolbar);
-
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArticleActivity.this.finish();//返回
+        /*如果从收藏页面跳转进来，则从intent获取数据；否则从dblist获取数据*/
+        //MenuItem favor=mToolbar.findViewById(R.id.action_fav);
+        //Final MenuItem favor=mToolbar.fin
+        if (!isFavorite) {
+            mPreviousBtn.setOnClickListener(this);
+            mNextBtn.setOnClickListener(this);
+            textView_author.setText(list.get(articlePosition).getAuthor().toString());
+            //textView_content.setText(list.get(0).getDescription());
+            textView_date.setText(list.get(articlePosition).getPubDate().toString());
+            textView_title.setText(list.get(articlePosition).getTitle().toString());
+            //如果从文章列表进入，则判断是否在收藏数据表中
+           /* if (favorRSSItemDAL.isFavor(list.get(articlePosition).getUri())){
+                favor.setIcon(R.drawable.ic_star_white_24dp);
+                //favor.setIcon(R.drawable.ic_star_white_24dp);
             }
-        });
 
+            else{
+                favor.setIcon(R.drawable.ic_star_border_white_24dp);
+            }*/
 
-
-
-        favorRSSItemDAL = new FavorRSSItemDALImpl(this);
-        //设置action menu
-        //填充menu
-        mToolbar.inflateMenu(R.menu.menu_article);
-        /*MenuItem favor=mToolbar.findViewById(R.id.action_fav);
-        if (!isFavorite){
-            favor.setIcon((R.drawable.ic_star_border_white_24dp));
-
+            textView_content.loadUrl(list.get(articlePosition).getUri());
+        } else {
+            textView_author.setText("");
+            textView_date.setText(getIntent().getStringExtra("addTime"));
+            textView_title.setText(getIntent().getStringExtra("title"));
+            textView_content.loadUrl(getIntent().getStringExtra("url"));
+            //favor.setIcon(R.drawable.ic_star_white_24dp);
         }
-        else{
-            favor.setIcon(R.drawable.ic_star_white_24dp);
-        }*/
+
         //设置点击事件
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -198,7 +175,10 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                 switch (item.getItemId()) {
                     case R.id.action_link:
                         Toast.makeText(ArticleActivity.this, "已跳转", Toast.LENGTH_SHORT).show();
-                        IntentUtil.openUrl(ArticleActivity.this, list.get(articlePosition).getLink());
+                        if (!isFavorite)
+                            IntentUtil.openUrl(ArticleActivity.this, list.get(articlePosition).getLink());
+                        else
+                            IntentUtil.openUrl(ArticleActivity.this, getIntent().getStringExtra("url"));
                         //System.out.println("测试:  url--" + list.get(0).getUri() + " title--" + list.get(0).getTitle() + "  discription--" + list.get(0).getDescription());
                         break;
                     case R.id.action_fav:
@@ -222,13 +202,14 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                     case R.id.action_share:
                         //"smsto:xxx" xxx是可以指定联系人的
                         Uri smsToUri = Uri.parse("smsto:");
-
                         Intent intent = new Intent(Intent.ACTION_SENDTO, smsToUri);
-
-                        String smsBody="我看到一篇好文章，推荐你也来看"+list.get(articlePosition).getUri();
-//"sms_body"必须一样，smsbody是发送短信内容content
+                        String smsBody = "我看到一篇好文章，推荐你也来看";
+                        if (!isFavorite)
+                            smsBody += list.get(articlePosition).getUri();
+                        else
+                            smsBody += list.get(articlePosition).getUri();
+                        //"sms_body"必须一样，smsbody是发送短信内容content
                         intent.putExtra("sms_body", smsBody);
-
                         startActivity(intent);
                         break;
                     default:
@@ -243,27 +224,34 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (v == mPreviousBtn) {
-            if (articlePosition < 1) {
-                Toast.makeText(ArticleActivity.this, "已经是第一篇", Toast.LENGTH_SHORT).show();
-            } else {
-                articlePosition--;
-                textView_author.setText(list.get(articlePosition).getAuthor().toString());
-                textView_date.setText(list.get(articlePosition).getPubDate().toString());
-                textView_title.setText(list.get(articlePosition).getTitle().toString());
-                textView_content.loadUrl(list.get(articlePosition).getUri());
-            }
+        if (!isFavorite) {
+            if (v == mPreviousBtn) {
+                if (articlePosition < 1) {
+                    Toast.makeText(ArticleActivity.this, "已经是第一篇", Toast.LENGTH_SHORT).show();
+                } else {
+                    articlePosition--;
+                    textView_author.setText(list.get(articlePosition).getAuthor().toString());
+                    textView_date.setText(list.get(articlePosition).getPubDate().toString());
+                    textView_title.setText(list.get(articlePosition).getTitle().toString());
+                    textView_content.loadUrl(list.get(articlePosition).getUri());
+                }
 
-        } else if (v == mNextBtn) {
-            if (articlePosition >= list.size() - 1) {
-                Toast.makeText(ArticleActivity.this, "已经是最后一篇", Toast.LENGTH_SHORT).show();
-            } else {
-                articlePosition++;
-                textView_author.setText(list.get(articlePosition).getAuthor().toString());
-                textView_date.setText(list.get(articlePosition).getPubDate().toString());
-                textView_title.setText(list.get(articlePosition).getTitle().toString());
-                textView_content.loadUrl(list.get(articlePosition).getUri());
+            } else if (v == mNextBtn) {
+                if (articlePosition >= list.size() - 1) {
+                    Toast.makeText(ArticleActivity.this, "已经是最后一篇", Toast.LENGTH_SHORT).show();
+                } else {
+                    articlePosition++;
+                    textView_author.setText(list.get(articlePosition).getAuthor().toString());
+                    textView_date.setText(list.get(articlePosition).getPubDate().toString());
+                    textView_title.setText(list.get(articlePosition).getTitle().toString());
+                    textView_content.loadUrl(list.get(articlePosition).getUri());
+                }
             }
+        }
+        //从收藏列表进入后隐藏上下切换按钮
+        else {
+            mPreviousBtn.setVisibility(View.INVISIBLE);
+            mNextBtn.setVisibility(View.INVISIBLE);
         }
     }
 }
