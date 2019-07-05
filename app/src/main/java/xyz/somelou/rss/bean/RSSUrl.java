@@ -13,34 +13,11 @@ public class RSSUrl {
     private String url;
     private String name;
     private String groupName;
-    // 是否订阅
-    private SubscribeStatus status;
+    private SubscribeStatus status;// 是否订阅
     private int count;//文章数
 
     public RSSUrl(){}
 
-    public RSSUrl(String url,String name,String groupName,String status){
-        this.url=url;
-        this.name=name;
-        this.groupName=groupName;
-        SubscribeStatus ss=SubscribeStatus.NO_SUBSCRIBE;
-        if(status.equals(SubscribeStatus.SUBSCRIBED.toString())){
-            ss=SubscribeStatus.SUBSCRIBED;
-        }
-        this.status=ss;
-    }
-
-    public RSSUrl(int id,String url,String name,String groupName,String status){
-        this.id=id;
-        this.url=url;
-        this.name=name;
-        this.groupName=groupName;
-        SubscribeStatus ss=SubscribeStatus.NO_SUBSCRIBE;
-        if(status.equals(SubscribeStatus.SUBSCRIBED.toString())){
-            ss=SubscribeStatus.SUBSCRIBED;
-        }
-        this.status=ss;
-    }
     public RSSUrl(int id,String url,String name,String groupName,String status,int count){
         this.id=id;
         this.url=url;
@@ -53,7 +30,6 @@ public class RSSUrl {
         this.status=ss;
         this.count=count;
     }
-
 
     public int getId() {
         return id;

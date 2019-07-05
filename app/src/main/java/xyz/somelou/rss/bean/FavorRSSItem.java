@@ -8,25 +8,10 @@ package xyz.somelou.rss.bean;
 public class FavorRSSItem {
 
     private int id;
-
-    // 此item的url
-    private String itemUrl;
-
+    private String itemUrl; // 此item的url
     private String titleName;
-
     private String description;
-
-    // 收藏时间
-    private String favorTime;
-
-    public FavorRSSItem(){}
-
-    public FavorRSSItem(String itemUrl,String titleName,String description,String favorTime){
-        this.titleName =titleName;
-        this.itemUrl=itemUrl;
-        this.description=description;
-        this.favorTime=favorTime;
-    }
+    private String favorTime;// 收藏时间
 
     public FavorRSSItem(int id,String itemUrl,String titleName,String description,String favorTime){
         this.id=id;

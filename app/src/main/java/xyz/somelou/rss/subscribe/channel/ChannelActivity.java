@@ -34,12 +34,6 @@ public class ChannelActivity extends AppCompatActivity {
         this.setTitle(RSSchannel);
         util = new RSSUtil(url);
         passages = (ArrayList) util.getRssItemBeans();
-        //passages=(ArrayList<RSSItemBean>) getIntent().getSerializableExtra("pages");
-        //测试
-        /*passages=new ArrayList<>();
-        for (int i=0;i<passages.size();i++){
-            Log.i("测试parcelable",passages.get(i).getTitle()+" "+passages.get(i).getDescription());
-        }*/
         //定义变量
         adapter=new RSSChannelAdapter(this,passages);
         //绑定

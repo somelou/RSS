@@ -1,14 +1,7 @@
 package xyz.somelou.rss.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import androidx.versionedparcelable.VersionedParcel;
 
 /**
  * @author somelou
@@ -41,52 +34,6 @@ public class RSSItemBean implements Serializable{
     public RSSItemBean(String t,String a,String u,String l,String d,Date date,String ty){
         title=t;author=a;uri=u;link=l;description=d;pubDate=date;type=ty;
     }
-/*
-    public RSSItemBean(String t,String a,String u,String l,String d,String date,String ty){
-        try {
-            title = t;
-            author = a;
-            uri = u;
-            link = l;
-            description = d;
-            type = ty;
-          pubDate = new SimpleDateFormat("E M dd HH:mm:ss z ").parse(date);
-        }
-        catch(ParseException e){
-            System.out.println("日期格式不对"+pubDate);
-            }
-    }
-
-    //重写两个Parcelable方法
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeString(author);
-        dest.writeString(uri);
-        dest.writeString(link);
-        dest.writeString(description);
-        dest.writeString(pubDate.toString());
-        dest.writeString(type);
-    }
-
-    public static final Parcelable.Creator<RSSItemBean> CREATOR=new Creator<RSSItemBean>(){
-
-        @Override
-        public RSSItemBean createFromParcel(Parcel source) {
-            return new RSSItemBean(source.readString(),source.readString(),source.readString(),
-                    source.readString(),source.readString(),source.readString(),source.readString());
-        }
-
-        @Override
-        public RSSItemBean[] newArray(int size) {
-            return new RSSItemBean[size];
-        }
-    };*/
 
     public String getTitle() {
         return title;

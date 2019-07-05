@@ -41,10 +41,23 @@ public class FavoriteActivity extends AppCompatActivity {
                 goToArticle.putExtra("position",position);
                 goToArticle.putExtra("title",favorites.get(position).getTitleName());
                 goToArticle.putExtra("discription",favorites.get(position).getDescription());
-                goToArticle.putExtra("addTime", "收藏时间:" + favorites.get(position).getFavorTime());
+                goToArticle.putExtra("addTime", favorites.get(position).getFavorTime());
                 startActivity(goToArticle);
                 Log.i("--FavoriteActivity", "点击了第" + (position + 1) + "篇收藏");
             }
         });
+    }
+
+    //刷新收藏列表
+    protected void flushFavorites() {
+        favorites.clear();
+        favorites.addAll(new FavorRSSItemDALImpl(context).getAllData(new ArrayList<FavorRSSItem>()));
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        flushFavorites();
     }
 }

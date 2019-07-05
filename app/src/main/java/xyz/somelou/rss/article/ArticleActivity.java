@@ -140,8 +140,6 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         });
 
         /*如果从收藏页面跳转进来，则从intent获取数据；否则从dblist获取数据*/
-        //MenuItem favor=mToolbar.findViewById(R.id.action_fav);
-        //Final MenuItem favor=mToolbar.fin
         if (!isFavorite) {
             mPreviousBtn.setOnClickListener(this);
             mNextBtn.setOnClickListener(this);
@@ -150,21 +148,16 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             textView_date.setText(list.get(articlePosition).getPubDate().toString());
             textView_title.setText(list.get(articlePosition).getTitle().toString());
             //如果从文章列表进入，则判断是否在收藏数据表中
-           /* if (favorRSSItemDAL.isFavor(list.get(articlePosition).getUri())){
-                favor.setIcon(R.drawable.ic_star_white_24dp);
-                //favor.setIcon(R.drawable.ic_star_white_24dp);
+            if (favorRSSItemDAL.isFavor(list.get(articlePosition).getUri())) {
+                mToolbar.getMenu().findItem(R.id.action_fav).setIcon(R.drawable.ic_star_white_24dp);
             }
-
-            else{
-                favor.setIcon(R.drawable.ic_star_border_white_24dp);
-            }*/
-
             textView_content.loadUrl(list.get(articlePosition).getUri());
         } else {
             textView_author.setText("");
             textView_date.setText(getIntent().getStringExtra("addTime"));
             textView_title.setText(getIntent().getStringExtra("title"));
             textView_content.loadUrl(getIntent().getStringExtra("url"));
+            mToolbar.getMenu().findItem(R.id.action_fav).setIcon(R.drawable.ic_star_white_24dp);
             //favor.setIcon(R.drawable.ic_star_white_24dp);
         }
 
@@ -207,7 +200,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                         if (!isFavorite)
                             smsBody += list.get(articlePosition).getUri();
                         else
-                            smsBody += list.get(articlePosition).getUri();
+                            smsBody += getIntent().getStringExtra("url");
                         //"sms_body"必须一样，smsbody是发送短信内容content
                         intent.putExtra("sms_body", smsBody);
                         startActivity(intent);
