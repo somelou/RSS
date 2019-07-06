@@ -25,7 +25,6 @@ import java.util.List;
 
 import xyz.somelou.rss.R;
 import xyz.somelou.rss.adapter.RSSSubscribeAdapter;
-import xyz.somelou.rss.bean.RSSItemBean;
 import xyz.somelou.rss.bean.RSSUrl;
 import xyz.somelou.rss.db.impl.RSSUrlDALImpl;
 import xyz.somelou.rss.enums.SubscribeStatus;
@@ -43,7 +42,6 @@ import xyz.somelou.rss.utils.SwitchGroupUtil;
 public class SubscribeFragment extends Fragment {
 
     private ArrayList<RSSUrl> subs;
-    private ArrayList<RSSItemBean> pages;
     private RSSSubscribeAdapter adapter;
     private RSSUrlDALImpl RSSdal;
     private ListView lv;
@@ -92,8 +90,6 @@ public class SubscribeFragment extends Fragment {
         lv=contentView.findViewById(R.id.SubList);//绑定布局
         lv.setAdapter(adapter);//设置适配器
         util=new RSSUtil();
-        //Log.i("默认validate",util.getValidate().toString());
-        pages=new ArrayList<>();
         registerForContextMenu(lv);
         return contentView;
 
@@ -163,10 +159,7 @@ public class SubscribeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Intent goToChannel=new Intent(getActivity(), ChannelActivity.class);
-                //传频道标题和所有文章
-                util.setRssUrl(subs.get(i).getUrl());//先设置网址进行解析
-                //pages= (ArrayList)util.getRssItemBeans();//再保存文章
-                //goToChannel.putExtra("pages",pages);
+                //传频道标题和url
                 goToChannel.putExtra("url",subs.get(i).getUrl());
                 goToChannel.putExtra("title",subs.get(i).getName());
                 startActivity(goToChannel);

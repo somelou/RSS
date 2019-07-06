@@ -130,9 +130,7 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
                 Toast.makeText(getActivity(),"--",Toast.LENGTH_SHORT).show();
                 //清除ListView的过滤
                 lv.clearTextFilter();
-                //RSSadapter.getFilter().filter("");
                 flushFinds();
-
                 break;
             case R.id.find_menu_search:
                 input();
@@ -209,7 +207,7 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
                         //获取点中的item
                         View item = am.targetView;
 
-                        int id=am.position+1;
+                        int id = am.position + 2;
                         //获取item名字
 
                         TextView itemName = (TextView) item.findViewById(R.id.RSSTitle);
@@ -294,8 +292,6 @@ public class FindFragment extends Fragment implements RSSFindAdapter.SubClickLis
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                /*Log.i("点击发现项",RSSfinds.get(i).getName()+RSSfinds.get(i).getId()
-                        +RSSfinds.get(i).getStatus()+RSSfinds.get(i).getGroupName()+RSSfinds.get(i).getUrl()+RSSfinds.get(i).getCount());*/
                 Toast.makeText(getActivity(), "第" + (i+1) + "行", Toast.LENGTH_SHORT).show();
             }
         });
