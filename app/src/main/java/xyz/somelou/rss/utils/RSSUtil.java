@@ -82,11 +82,9 @@ public class RSSUtil {
     }
 
     public synchronized boolean isConnect(String urlStr) {
-
         if (urlStr == null || urlStr.length() <= 0) {
             return false;
         }
-
         try {
             URL url = new URL(urlStr);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -96,7 +94,6 @@ public class RSSUtil {
         }catch (Exception ex) {
             return false;
         }
-
         return false;
     }
 

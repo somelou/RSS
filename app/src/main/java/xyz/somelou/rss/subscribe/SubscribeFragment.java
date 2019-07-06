@@ -88,13 +88,6 @@ public class SubscribeFragment extends Fragment {
         //初始化页面
         RSSdal=new RSSUrlDALImpl(getContext());
         subs=RSSdal.getSubscribe(new ArrayList<RSSUrl>());//获取已订阅的频道
-        /*if (subs.size()>0) {
-            for (int i = 0; i < subs.size(); i++) {
-                Log.i("测试组别", subs.get(i).getName()+"组："+subs.get(i).getGroupName());
-            }
-        }
-        else
-            Log.i("测试已订阅列表","空");*/
         adapter=new RSSSubscribeAdapter(getActivity(),subs);
         lv=contentView.findViewById(R.id.SubList);//绑定布局
         lv.setAdapter(adapter);//设置适配器
@@ -140,16 +133,10 @@ public class SubscribeFragment extends Fragment {
                                         Toast.makeText(getContext(),"非法RSS源，无法添加！", Toast.LENGTH_SHORT).show();
                                         Log.i("-------订阅界面:","添加失败");
                                     }
-
                                 }
-
                             }
                         }).setNegativeButton("取消", null);
                 dialog.show();
-                /*key_word.setFocusable(true);
-                key_word.setFocusableInTouchMode(true);
-                //请求获得焦点
-                key_word.requestFocus();*/
                 Log.i("对话框之后","--");
                 break;
             case R.id.subscribe_menu_refresh:
@@ -220,14 +207,11 @@ public class SubscribeFragment extends Fragment {
 
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
-
                 // 返回包含了listView中被选中的Item的信息对象
                 AdapterView.AdapterContextMenuInfo am = (AdapterView.AdapterContextMenuInfo) menuInfo;
-
                 //获取点中的item
                 View item = am.targetView;
                 //获取item名字
-
                 TextView itemName = (TextView) item.findViewById(R.id.SubTitle);
                 switchGroupUtil=new SwitchGroupUtil(getContext());//工具类初始化
                 switchGroupUtil.setIDbyName(itemName.getText().toString().trim());
@@ -244,55 +228,39 @@ public class SubscribeFragment extends Fragment {
     }
     //选择菜单动作
     public boolean onContextItemSelected(MenuItem item) {
-
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
                 .getMenuInfo();
-
         switch (item.getItemId()) {
-
             case 0:
                 // 更改分组
-                Toast.makeText(getContext(), "更改分组",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "更改分组", Toast.LENGTH_SHORT).show();
                 showChoise();
-
                 break;
-
             case 4:
                 // 添加至新分组
-                Toast.makeText(getContext(), "添加至新分组",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "添加至新分组", Toast.LENGTH_SHORT).show();
                 createGroup();
-
                 break;
-
             case 5:
                 // 取消订阅
                 RSSdal.updateSubscribeStatus(MID,SubscribeStatus.NO_SUBSCRIBE);
                 flushSubscribe();
-                Toast.makeText(getContext(), "取消成功",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "取消成功", Toast.LENGTH_SHORT).show();
                 break;
-
             case 3:
                 // 删除该订阅
                 RSSdal.deleteOneData(MID);
                 flushSubscribe();
-                Toast.makeText(getContext(), "删除成功",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "删除成功", Toast.LENGTH_SHORT).show();
                 break;
-
             default:
                 break;
         }
-
         return super.onContextItemSelected(item);
     }
 
     //选择分组动作函数
-    private void showChoise()
-    {
-
+    private void showChoise() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),android.R.style.Theme_Holo_Light_Dialog);
         //builder.setIcon(R.drawable.ic_launcher);
         builder.setTitle("选择一个分组");
@@ -312,7 +280,6 @@ public class SubscribeFragment extends Fragment {
             }
         });
         builder.show();
-
     }
 
     //创建分组
@@ -331,7 +298,6 @@ public class SubscribeFragment extends Fragment {
                         }
                         adapter.notifyDataSetChanged();
                         flushSubscribe();
-
                     }
                 }).setNegativeButton("取消", null);
         //先显示对话框
