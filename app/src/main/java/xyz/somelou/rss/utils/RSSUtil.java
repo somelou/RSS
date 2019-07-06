@@ -75,7 +75,6 @@ public class RSSUtil {
             cdl.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
-            isValidate=false;
             return "failed";
         }
         return "success";
@@ -177,15 +176,7 @@ public class RSSUtil {
             item.setTitle(entry.getTitle().trim());
             item.setType(feed.getTitleEx().getValue().trim());
             item.setUri(entry.getUri());
-            /*if (entry.getPublishedDate().toString()==null){
-                item.setPubDate(new Date());
-                Log.i("RSSUtil---","第"+i+"个文章发布日期为空");
-            }
-
-            else{*/
-                item.setPubDate(entry.getPublishedDate());
-            //Log.i("RSSUtil---","第"+i+"个文章,发布日期:"+item.getPubDate().toString());
-
+            item.setPubDate(entry.getPublishedDate());
             item.setAuthor(entry.getAuthor());
             // description过长时截取
             item.setDescription(ClearStringUtil.clearDescription(entry.getDescription().getValue()));
@@ -194,7 +185,6 @@ public class RSSUtil {
             rssItemBeans.add(item);
         }
         return this.rssItemBeans;
-        //System.out.println("titleName: " + titleName+", url: "+url);
     }
 
     /**
