@@ -21,14 +21,6 @@ public class FavoriteListAdapter extends BaseAdapter {
     private ArrayList<FavorRSSItem> passages;
     private Context context;
 
-    public class ViewHolder{
-        public TextView title;//文章标题
-        public TextView discription;//文章简述
-        public TextView author;//文章作者
-        public TextView date;//文章发行日期
-        public ImageView icon;//默认图标
-    }
-
     public FavoriteListAdapter(){}
 
     public FavoriteListAdapter(Context context,ArrayList<FavorRSSItem> list){
@@ -75,10 +67,17 @@ public class FavoriteListAdapter extends BaseAdapter {
         vh.icon.setImageResource(R.mipmap.article);
         vh.title.setText(passages.get(position).getTitleName());
         vh.discription.setText(passages.get(position).getDescription());
-        vh.date.setText(passages.get(position).getFavorTime());
-        //vh.author.setText(passages.get(position).getAuthor());
+        vh.date.setText("收藏时间:" + passages.get(position).getFavorTime());
         vh.discription.setTextColor(context.getResources().getColor(R.color.tab_unchecked));
         vh.date.setTextColor(context.getResources().getColor(R.color.tab_unchecked));
         return convertView;
+    }
+
+    public class ViewHolder {
+        public TextView title;//文章标题
+        public TextView discription;//文章简述
+        public TextView author;//文章作者
+        public TextView date;//文章发行日期
+        public ImageView icon;//默认图标
     }
 }

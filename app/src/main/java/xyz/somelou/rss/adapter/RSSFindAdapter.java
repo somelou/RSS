@@ -31,23 +31,6 @@ public class RSSFindAdapter extends BaseAdapter implements Filterable,View.OnCli
     private RSSFilter mfilter;
     private SubClickListener clickListener;//为每个item的按钮设置自定义监听器
 
-    //定义一个订阅按钮的接口，用于回调点击按钮的方法
-    public interface  SubClickListener{
-        public void subClick(View v);
-    }
-
-    RSSFindAdapter(){
-
-    }
-
-    public RSSFindAdapter(Context c,ArrayList<RSSUrl> list){
-        context=c;
-        finds=list;
-        bkfinds=list;
-        /*for (int i=0;i<finds.size();i++)
-        System.out.println("过滤前:"+finds.get(i).getUrl()+" , "+finds.get(i).getName());*/
-    }
-
     public RSSFindAdapter(Context c,ArrayList<RSSUrl> list,SubClickListener cl){
         context=c;
         finds=list;
@@ -59,10 +42,6 @@ public class RSSFindAdapter extends BaseAdapter implements Filterable,View.OnCli
     public int getCount() {
         return finds.size();
     }
-    //刷新时还原
-    public ArrayList<RSSUrl> getOriginalData(){
-        return bkfinds;
-    }
 
     @Override
     public Object getItem(int position) {
@@ -73,8 +52,6 @@ public class RSSFindAdapter extends BaseAdapter implements Filterable,View.OnCli
     public long getItemId(int position) {
         return position;
     }
-
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -120,6 +97,11 @@ public class RSSFindAdapter extends BaseAdapter implements Filterable,View.OnCli
         clickListener.subClick(v);
     }
 
+    //定义一个订阅按钮的接口，用于回调点击按钮的方法
+    public interface SubClickListener {
+        void subClick(View v);
+    }
+
     //内部类用于保存item各个组件
     class ViewHolder{
 
@@ -145,20 +127,9 @@ public class RSSFindAdapter extends BaseAdapter implements Filterable,View.OnCli
                 //不能给templist赋值，否则会影响指向同一内存的finds的数据
                 templist.clear();
                 templist.addAll(sql.getQueryData(new ArrayList<RSSUrl>(),constraint.toString()));
-                //templist = ;
-              /*  for (RSSUrl tempRSS : finds) {
-                    //匹配RSS源的标题，组名
-                    if (tempRSS.getName().contains(constraint) || tempRSS.getGroupName().
-                            contains(constraint)
-                            ) {
-                        templist.add(tempRSS);
-                    }
-                }*/
             }
             result.values = templist; //将得到的集合保存到FilterResults的value变量中
             result.count = templist.size();//将集合的大小保存到FilterResults的count变量中
-            /*if (result.count>0)
-            System.out.println("过滤后:"+templist.get(0).getUrl()+", "+templist.get(0).getName());*/
             return result;
         }
 
@@ -166,9 +137,6 @@ public class RSSFindAdapter extends BaseAdapter implements Filterable,View.OnCli
         protected void publishResults(CharSequence constraint, FilterResults results) {
 
             finds = (ArrayList<RSSUrl>) results.values;
-            for (int i=0;i<finds.size();i++) {
-                System.out.println("过滤后,当前是第"+i +"个,链接为"+ finds.get(i).getUrl() + ", 标题是" + finds.get(i).getName());
-            }
             //通知数据改变
             notifyDataSetChanged();
             //检索不到数据则提示空
